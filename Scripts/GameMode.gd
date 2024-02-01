@@ -15,9 +15,14 @@ enum PlayerStatus {pending, raised, folded, broke, allIn}
 	
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # 
+	Setup()
+
 func Setup():
-	pass
+	SetupDeck()
+	SetupPlayers()
+	SetupDeck()
+	StartRound()
+
 func SetupTable():
 	pass
 func SetupPlayers():
@@ -37,7 +42,6 @@ func StartRound():
 
 	for player in players:
 		if (player.ChipsOwned != 0): #can the player play
-			player.hand = PickCardsFromDeck(2) #cards
 			playingPlayers.append(player)
 	#rotate blinds
 	bigBlind = IncrementInRange(bigBlind,0,playingPlayers.length)
@@ -56,7 +60,9 @@ func RevealCard():
 func DecideWinner():
 	pass
 func DealCards():
-	pass
+	for player in playingPlayers:
+		player.hand = PickCardsFromDeck(2) #cards
+
 func ShuffleDeck():
 	pass
 

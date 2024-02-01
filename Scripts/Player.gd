@@ -3,8 +3,9 @@ var hand
 var playerIdx
 var playerName
 var chipsOwned
-var Status
+var status
 
+enum PlayerStatus {pending, raised, folded, broke, allIn}
 
 func _ready():
 	pass 
@@ -15,4 +16,6 @@ func Call():
 func Check():
 	pass
 func Fold():
+	pass
+func Raise():
 	pass
