@@ -5,14 +5,6 @@ var bigBlind = 0
 var smallBlind = 1
 var tableCards
 
-var allCards
-var finalHand
-var finalScore
-var heartCards
-var spadeCards
-var clubCards
-var diamondCards
-var index
 
 var playingPlayers
 var players
@@ -68,6 +60,9 @@ func EndRound():
 	pass
 func RevealCard():
 	pass
+
+var allCards #array which stores the open cards on the table and the cards in the players hand
+var finalScore #integer which gives a score to specific hands, used to decide a winner
 func DecideWinner():
 	for player in playingPlayers:
 		finalScore = 0
@@ -85,28 +80,34 @@ func SortAscending(a, b):
 	return false
 
 func StraightChecker():
-	if allCards[0].number + 1 == allCards[1].number:
-		if allCards[1].number + 1 == allCards[2].number:
-			if allCards [2].number + 1 == allCards[3].number:
-				if allCards[3].number + 1 == allCards[4].number:
-					return true
-	if allCards[1].number + 1 == allCards[2].number:
-		if allCards[2].number + 1 == allCards[3].number:
-			if allCards [3].number + 1 == allCards[4].number:
-				if allCards[4].number + 1 == allCards[5].number:
-					return true
-	if allCards[2].number + 1 == allCards[3].number:
-		if allCards[3].number + 1 == allCards[4].number:
-			if allCards [4].number + 1 == allCards[5].number:
-				if allCards[5].number + 1 == allCards[6].number:
-					return true
+	for i in 3:
+		if allCards[i].number + 1 == allCards[i+1].number:
+			if allCards[i+1].number + 1 == allCards[i+2].number:
+				if allCards [i+2].number + 1 == allCards[i+3].number:
+					if allCards[i+3].number + 1 == allCards[i+4].number:
+						return true
 	return false
 
+func PairChecker():
+	var pairScore = 0
+	for i in 6:
+		if allCards[i].number + 1 == allCards[i+1].number:
+			pairScore = 2
+			if i <= 4:
+				if allCards [i+1].number + 1 == allCards[i+2].number:
+					pairScore = 3
+					if i <= 3:
+						if allCards[i+2].number + 1 == allCards[i+3].number:
+							pairScore = 4
+	return pairScore
+
+#the number of cards of the same type
+var heartCards = 0
+var spadeCards = 0
+var clubCards = 0
+var diamondCards = 0
+
 func TypeChecker():
-	heartCards = 0
-	spadeCards = 0
-	clubCards = 0
-	diamondCards = 0
 	for card in allCards:
 		if card.type == "h":
 			heartCards += 1
