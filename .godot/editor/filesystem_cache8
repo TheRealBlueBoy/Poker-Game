@@ -1,8 +1,8 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1706879243
+::res://::1706907683
 icon.svg::CompressedTexture2D::4378935973245384803::1706877553::1706877553::1::::<><>::
-::res://Scripts/::1706879221
+::res://Scripts/::1706885710
 Card.gd::GDScript::-1::1706879221::0::1::::Card<>RefCounted<>::
 Deck.gd::GDScript::-1::1706879221::0::1::::Deck<>RefCounted<>::
-GameMode.gd::GDScript::-1::1706879221::0::1::::GameMode<>RefCounted<>::
+GameMode.gd::GDScript::-1::1706885710::0::1::::GameMode<>RefCounted<>::
 Player.gd::GDScript::-1::1706877553::0::1::::Player<>RefCounted<>::

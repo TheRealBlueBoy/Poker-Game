@@ -63,13 +63,16 @@ func RevealCard():
 
 var allCards #array which stores the open cards on the table and the cards in the players hand
 var finalScore #integer which gives a score to specific hands, used to decide a winner
+var finalCards #stores the final 5 cards of a "hand"
+
 func DecideWinner():
 	for player in playingPlayers:
 		finalScore = 0
 		allCards.append_array(tableCards)
 		allCards.append_array(player.hand)
 		allCards.sort_custom(SortAscending)
-		
+	
+
 func DealCards():
 	for player in playingPlayers:
 		player.hand = PickCardsFromDeck(2) #cards
@@ -79,44 +82,124 @@ func SortAscending(a, b):
 		return true
 	return false
 
+var temporaryCards
+func StraightflushChecker():
+	StraightCheckerTemplate(temporaryCards, false)
+	TypeChecker(temporaryCards)
+	if heartCards >= 5:
+		finalCards.append_array(heartCards)
+		return true
+	if spadeCards >= 5:
+		finalCards.append_array(spadeCards)
+		return true
+	if clubCards >= 5:
+		finalCards.append_array(clubCards)
+		return true
+	if diamondCards >= 5:
+		finalCards.append_array(diamondCards)
+		return true
+	return false
+
+func FourOfAKindChecker():
+	if PairChecker("four") == 4:
+		return true
+	return false
+	
+func FullHouseChecker():
+	#still need to make logic
+	return false
+
+func FlushChecker():
+	TypeChecker(allCards)
+	if heartCards >= 5:
+		finalCards.append_array(heartCards)
+		return true
+	if spadeCards >= 5:
+		finalCards.append_array(spadeCards)
+		return true
+	if clubCards >= 5:
+		finalCards.append_array(clubCards)
+		return true
+	if diamondCards >= 5:
+		finalCards.append_array(diamondCards)
+		return true
+	return false
+
 func StraightChecker():
+	StraightCheckerTemplate(finalCards, true)
+
+func ThreeOfAKindChecker():
+	if PairChecker("three") == 3:
+		return true
+	return false
+
+func TwoPairChecker():
+	#still need to make logic
+	return false
+
+func OnePairChecker():
+	if PairChecker("twoo") == 2:
+		return true
+	return false
+
+func StraightCheckerTemplate(saver, end):
 	for i in 3:
 		if allCards[i].number + 1 == allCards[i+1].number:
 			if allCards[i+1].number + 1 == allCards[i+2].number:
 				if allCards [i+2].number + 1 == allCards[i+3].number:
 					if allCards[i+3].number + 1 == allCards[i+4].number:
-						return true
-	return false
+						saver.append(allCards[i])
+						saver.append(allCards[i+1])
+						saver.append(allCards[i+2])
+						saver.append(allCards[i+3])
+						saver.append(allCards[i+4])
+						if end == true:
+							return true
+	if end == true:
+		return false
 
-func PairChecker():
+
+func PairChecker(string):
 	var pairScore = 0
 	for i in 6:
-		if allCards[i].number + 1 == allCards[i+1].number:
+		if allCards[i].number == allCards[i+1].number:
 			pairScore = 2
+			if string.to_lower() == "two":
+				finalCards.append(allCards[i])
+				finalCards.append(allCards[i+1])
 			if i <= 4:
-				if allCards [i+1].number + 1 == allCards[i+2].number:
+				if allCards [i+1].number == allCards[i+2].number:
 					pairScore = 3
+					if string.to_lower() == "three":
+						finalCards.append(allCards[i])
+						finalCards.append(allCards[i+1])
+						finalCards.append(allCards[i+2])
 					if i <= 3:
-						if allCards[i+2].number + 1 == allCards[i+3].number:
+						if allCards[i+2].number == allCards[i+3].number:
 							pairScore = 4
+							if string.to_lower() == "four":
+								finalCards.append(allCards[i])
+								finalCards.append(allCards[i+1])
+								finalCards.append(allCards[i+2])
+								finalCards.append(allCards[i+3])
 	return pairScore
 
-#the number of cards of the same type
-var heartCards = 0
-var spadeCards = 0
-var clubCards = 0
-var diamondCards = 0
+#array of cards of the same type
+var heartCards
+var spadeCards
+var clubCards
+var diamondCards
 
-func TypeChecker():
-	for card in allCards:
+func TypeChecker(set):
+	for card in set:
 		if card.type == "h":
-			heartCards += 1
+			heartCards.append(card)
 		if card.type == "s":
-			spadeCards += 1
+			spadeCards.append(card)
 		if card.type == "s":
-			clubCards += 1
+			clubCards.append(card)
 		if card.type == "d":
-			diamondCards += 1
+			diamondCards.append(card)
 
 
 func PickCardsFromDeck(amount):
