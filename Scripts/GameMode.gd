@@ -5,6 +5,14 @@ var bigBlind = 0
 var smallBlind = 1
 var tableCards
 
+var allCards
+var finalHand
+var finalScore
+var heartCards
+var spadeCards
+var clubCards
+var diamondCards
+var index
 
 var playingPlayers
 var players
@@ -61,15 +69,53 @@ func EndRound():
 func RevealCard():
 	pass
 func DecideWinner():
-	pass
+	for player in playingPlayers:
+		finalScore = 0
+		allCards.append_array(tableCards)
+		allCards.append_array(player.hand)
+		allCards.sort_custom(SortAscending)
+		
 func DealCards():
 	for player in playingPlayers:
 		player.hand = PickCardsFromDeck(2) #cards
 
+func SortAscending(a, b):
+	if a.card.number < b.card.number:
+		return true
+	return false
 
+func StraightChecker():
+	if allCards[0].number + 1 == allCards[1].number:
+		if allCards[1].number + 1 == allCards[2].number:
+			if allCards [2].number + 1 == allCards[3].number:
+				if allCards[3].number + 1 == allCards[4].number:
+					return true
+	if allCards[1].number + 1 == allCards[2].number:
+		if allCards[2].number + 1 == allCards[3].number:
+			if allCards [3].number + 1 == allCards[4].number:
+				if allCards[4].number + 1 == allCards[5].number:
+					return true
+	if allCards[2].number + 1 == allCards[3].number:
+		if allCards[3].number + 1 == allCards[4].number:
+			if allCards [4].number + 1 == allCards[5].number:
+				if allCards[5].number + 1 == allCards[6].number:
+					return true
+	return false
 
-
-
+func TypeChecker():
+	heartCards = 0
+	spadeCards = 0
+	clubCards = 0
+	diamondCards = 0
+	for card in allCards:
+		if card.type == "h":
+			heartCards += 1
+		if card.type == "s":
+			spadeCards += 1
+		if card.type == "s":
+			clubCards += 1
+		if card.type == "d":
+			diamondCards += 1
 
 
 func PickCardsFromDeck(amount):
