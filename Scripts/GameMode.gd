@@ -1,15 +1,17 @@
 class_name GameMode
+var savedCardDeck
 var cardDeck
 var bigBlind = 0
 var smallBlind = 1
 var tableCards
+
 
 var playingPlayers
 var players
 var actingPlayerIdx
 var playerBets
 
-enum PlayerStatus {pending, raised, folded, broke, allIn}
+enum PlayerStatus {pending, raised, folded, broke, allIn, check}
 
 
 	
@@ -28,7 +30,7 @@ func SetupTable():
 func SetupPlayers():
 	pass
 func SetupDeck():
-	pass
+	savedCardDeck = Deck.new().createCardDeck()
 
 #gamecycle
 func StartTurn():
@@ -53,7 +55,8 @@ func StartRound():
 	StartTurn()
 
 func EndRound():
-	ShuffleDeck()
+	cardDeck = savedCardDeck
+	cardDeck.randomize()
 	pass
 func RevealCard():
 	pass
@@ -63,8 +66,7 @@ func DealCards():
 	for player in playingPlayers:
 		player.hand = PickCardsFromDeck(2) #cards
 
-func ShuffleDeck():
-	pass
+
 
 
 

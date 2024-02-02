@@ -1,2 +1,3 @@
+res://Scripts/Deck.gd
+res://Scripts/Card.gd
 res://Scripts/GameMode.gd
-res://Scripts/Player.gd
