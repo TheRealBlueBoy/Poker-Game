@@ -1,15 +1,15 @@
-class_name GameMode
-var savedCardDeck
-var cardDeck
+class_name GameMode extends Node2D
+var savedCardDeck = []
+var cardDeck = []
 var bigBlind = 0
 var smallBlind = 1
-var tableCards
+var tableCards = []
 
 
-var playingPlayers
-var players
-var actingPlayerIdx
-var playerBets
+var playingPlayers = []
+var players = []
+var actingPlayerIdx = 0
+var playerBets = []
 
 enum PlayerStatus {pending, raised, folded, broke, allIn, check}
 
@@ -28,13 +28,20 @@ func Setup():
 func SetupTable():
 	pass
 func SetupPlayers():
-	pass
+	for i in 5:
+		var player_scene = preload("res://Player.tscn")
+		print("hellp")
+		players.append(player_scene.instantiate(i).get_script())
+		#players.append(Player.new(i))
+		
+		print(players[i])
+
 func SetupDeck():
 	savedCardDeck = Deck.new().createCardDeck()
 
 #gamecycle
 func StartTurn():
-	actingPlayerIdx=IncrementInRange(actingPlayerIdx,0,playingPlayers.length)
+	actingPlayerIdx=IncrementInRange(actingPlayerIdx,0,playingPlayers.size()-1)
 	if (playingPlayers[actingPlayerIdx].status == PlayerStatus.allIn): #skips the turn if player is allin
 		EndTurn()
 	
@@ -43,16 +50,17 @@ func EndTurn():
 func StartRound():
 
 	for player in players:
-		if (player.ChipsOwned != 0): #can the player play
+		if (player.chipsOwned != 0): #can the player play
 			playingPlayers.append(player)
 	#rotate blinds
-	bigBlind = IncrementInRange(bigBlind,0,playingPlayers.length)
-	smallBlind = IncrementInRange(smallBlind,0,playingPlayers.length)
+	bigBlind = IncrementInRange(bigBlind,0,playingPlayers.size()-1)
+	smallBlind = IncrementInRange(smallBlind,0,playingPlayers.size()-1)
 	players[smallBlind].Raise()
 	players[bigBlind].Raise()
-	actingPlayerIdx=DecreaseInRange(smallBlind,0,playingPlayers.length)
+	actingPlayerIdx=DecreaseInRange(smallBlind,0,playingPlayers.size()-1)
 	tableCards = PickCardsFromDeck(5)
-	StartTurn()
+	if (playingPlayers.size() != 0):
+		StartTurn()
 
 func EndRound():
 	cardDeck = savedCardDeck
@@ -78,7 +86,7 @@ func DealCards():
 		player.hand = PickCardsFromDeck(2) #cards
 
 func SortAscending(a, b):
-	if a.card.number < b.card.number:
+	if a.StandardCard.number < b.StandardCard.number:
 		return true
 	return false
 
@@ -203,8 +211,8 @@ func TypeChecker(set):
 
 
 func PickCardsFromDeck(amount):
-	var idx
-	var pickedCards
+	var idx = 0
+	var pickedCards = []
 	while (amount < idx):
 		pickedCards.append(cardDeck.pop_at(0))#removes the card from carddeck and adds it to pickedcards
 	return pickedCards

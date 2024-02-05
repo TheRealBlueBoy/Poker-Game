@@ -1,14 +1,18 @@
-class_name Player
-var hand
-var playerIdx
-var playerName
-var chipsOwned
-var status
+class_name Player extends Node2D
+var hand = []
+var playerName = ""
+var chipsOwned = 100
+var status = PlayerStatus.pending
+var index
 
 enum PlayerStatus {pending, raised, folded, broke, allIn}
 
+func _init(i):
+	index = i 
+	
 func _ready():
-	pass 
+	pass
+	
 func Pass():
 	pass
 func Call():

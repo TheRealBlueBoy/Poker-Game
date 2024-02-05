@@ -1,1 +1,8 @@
+res://Scripts/Card.gd
+res://Scripts/StandardCard.gd
+res://Scripts/Deck.gd
 res://Scripts/GameMode.gd
+res://MainScene.tscn
+res://Scripts/Player.tscn
+res://Player.tscn
+res://Scripts/Player.gd
