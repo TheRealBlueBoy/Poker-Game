@@ -1,8 +1,8 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1707123800
+::res://::1707723190
 icon.svg::CompressedTexture2D::4378935973245384803::1706267296::1706267328::1::::<><>::
-MainScene.tscn::PackedScene::8257443338382843297::1707123770::0::1::::<><>::res://Scripts/GameMode.gd
-Player.tscn::PackedScene::7328003264708417353::1707123770::0::1::::<><>::uid://fc54bpcgrm0f::::res://playerSprite.jpg<>res://Scripts/Player.gd
+MainScene.tscn::PackedScene::8257443338382843297::1707133832::0::1::::<><>::res://Scripts/GameMode.gd
+Player.tscn::PackedScene::7328003264708417353::1707133832::0::1::::<><>::uid://fc54bpcgrm0f::::res://playerSprite.jpg<>res://Scripts/Player.gd
 playerSprite.jpg::CompressedTexture2D::356946347299505519::1707121118::1707121120::1::::<><>::
 ::res://Scripts/::1707123770
 Card.gd::GDScript::-1::1707119075::0::1::::Card<>RefCounted<>::

@@ -4,11 +4,13 @@ var playerName = ""
 var chipsOwned = 100
 var status = PlayerStatus.pending
 var index
+var child
 
 enum PlayerStatus {pending, raised, folded, broke, allIn}
 
-func _init(i):
+func Init(i):
 	index = i 
+	child = Node2D.new()
 	
 func _ready():
 	pass

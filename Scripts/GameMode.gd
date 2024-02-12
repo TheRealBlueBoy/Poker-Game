@@ -30,11 +30,9 @@ func SetupTable():
 func SetupPlayers():
 	for i in 5:
 		var player_scene = preload("res://Player.tscn")
-		print("hellp")
-		players.append(player_scene.instantiate(i).get_script())
-		#players.append(Player.new(i))
+		players.append(Player.new())
 		
-		print(players[i])
+		players[i].Init(i)
 
 func SetupDeck():
 	savedCardDeck = Deck.new().createCardDeck()
