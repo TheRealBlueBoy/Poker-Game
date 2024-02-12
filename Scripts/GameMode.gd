@@ -29,10 +29,12 @@ func SetupTable():
 	pass
 func SetupPlayers():
 	for i in 5:
+		const playerloc = [Vector2(0,0),Vector2(400,0),Vector2(-400,0),Vector2(0,400),Vector2(0,-400)]
 		var player_scene = preload("res://Player.tscn")
+		player_scene = player_scene.instantiate()
+		add_child(player_scene)
 		players.append(Player.new())
-		
-		players[i].Init(i)
+		players[i].Init(i, playerloc[i], player_scene)
 
 func SetupDeck():
 	savedCardDeck = Deck.new().createCardDeck()

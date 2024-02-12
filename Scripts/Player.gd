@@ -8,9 +8,13 @@ var child
 
 enum PlayerStatus {pending, raised, folded, broke, allIn}
 
-func Init(i):
+func Init(i, loc, c):
+	child = c
+	child.position = loc
 	index = i 
-	child = Node2D.new()
+	
+	
+	
 	
 func _ready():
 	pass

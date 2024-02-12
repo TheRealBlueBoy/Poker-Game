@@ -6,3 +6,5 @@
 
 [node name="BackGround" type="Sprite2D" parent="."]
 script = ExtResource("1_11ykk")
+
+[node name="Camera2D" type="Camera2D" parent="."]
