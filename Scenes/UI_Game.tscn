@@ -1,0 +1,72 @@
+[gd_scene load_steps=2 format=3 uid="uid://dwlgjpjn3ibd6"]
+
+[ext_resource type="Script" path="res://Scripts/UIGame.gd" id="1_b8ddi"]
+
+[node name="UiGame" type="CanvasLayer"]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_b8ddi")
+
+[node name="RaiseBar" type="ProgressBar" parent="Control"]
+layout_mode = 2
+offset_left = 1015.0
+offset_top = 350.0
+offset_right = 1091.0
+offset_bottom = 550.0
+size_flags_vertical = 1
+max_value = 1.0
+fill_mode = 3
+
+[node name="RaiseBarInteractable" type="Button" parent="Control"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -59.0
+offset_top = -126.0
+offset_right = -34.0
+offset_bottom = -100.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="actionContainer" type="HBoxContainer" parent="Control"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="FoldButton" type="Button" parent="Control/actionContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "fold
+"
+
+[node name="Check_CallButton" type="Button" parent="Control/actionContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "check/call"
+
+[node name="RaiseButton" type="Button" parent="Control/actionContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "raise"
+
+[connection signal="button_down" from="Control/RaiseBarInteractable" to="Control" method="_on_raise_bar_interactable_button_down"]
+[connection signal="button_up" from="Control/RaiseBarInteractable" to="Control" method="_on_raise_bar_interactable_button_up"]
+[connection signal="ready" from="Control/RaiseBarInteractable" to="Control" method="_on_raise_bar_interactable_ready"]
+[connection signal="pressed" from="Control/actionContainer/FoldButton" to="Control" method="_on_fold_button_pressed"]
+[connection signal="pressed" from="Control/actionContainer/Check_CallButton" to="Control" method="_on_check_call_button_pressed"]
+[connection signal="pressed" from="Control/actionContainer/RaiseButton" to="Control" method="_on_raise_button_pressed"]

@@ -4,12 +4,12 @@ var cardDeck = []
 var bigBlind = 0
 var smallBlind = 1
 var tableCards = []
-
+var gameUI
 
 var playingPlayers = []
 var players = []
 var actingPlayerIdx = 0
-var playerBets = []
+var playerBets = [10,0,0,0,0]
 
 enum PlayerStatus {pending, raised, folded, broke, allIn, check}
 
@@ -23,6 +23,7 @@ func Setup():
 	SetupDeck()
 	SetupPlayers()
 	SetupDeck()
+	SetupUI()
 	StartRound()
 
 func SetupTable():
@@ -30,33 +31,45 @@ func SetupTable():
 func SetupPlayers():
 	for i in 5:
 		const playerloc = [Vector2(0,0),Vector2(400,0),Vector2(-400,0),Vector2(0,400),Vector2(0,-400)]
-		var player_scene = preload("res://Player.tscn")
+		var player_scene = preload("res://Scenes/Player.tscn")
 		player_scene = player_scene.instantiate()
 		add_child(player_scene)
 		players.append(Player.new())
-		players[i].Init(i, playerloc[i], player_scene)
+		players[i].Init(i, playerloc[i], player_scene, self)
 
 func SetupDeck():
 	savedCardDeck = Deck.new().createCardDeck()
+	
+func SetupUI():
+	gameUI = preload("res://Scenes/UI_Game.tscn")
+	gameUI = gameUI.instantiate()
+	add_child(gameUI)
+	gameUI = gameUI.find_child("Control")
+	gameUI.Init(self)
 
+
+	
 #gamecycle
 func StartTurn():
 	actingPlayerIdx=IncrementInRange(actingPlayerIdx,0,playingPlayers.size()-1)
+	gameUI.ChangePlayer(actingPlayerIdx)
 	if (playingPlayers[actingPlayerIdx].status == PlayerStatus.allIn): #skips the turn if player is allin
 		EndTurn()
 	
 func EndTurn():
 	pass
+	
 func StartRound():
 
 	for player in players:
 		if (player.chipsOwned != 0): #can the player play
 			playingPlayers.append(player)
+			player.status = PlayerStatus.pending
 	#rotate blinds
 	bigBlind = IncrementInRange(bigBlind,0,playingPlayers.size()-1)
 	smallBlind = IncrementInRange(smallBlind,0,playingPlayers.size()-1)
-	players[smallBlind].Raise()
-	players[bigBlind].Raise()
+	players[smallBlind].Raise(10)
+	players[bigBlind].Raise(20)
 	actingPlayerIdx=DecreaseInRange(smallBlind,0,playingPlayers.size()-1)
 	tableCards = PickCardsFromDeck(5)
 	if (playingPlayers.size() != 0):
@@ -209,6 +222,12 @@ func TypeChecker(set):
 		if card.type == "d":
 			diamondCards.append(card)
 
+func GetAllPlayerStatuses():
+	var array
+	for player in playingPlayers:
+		array.append(player.status)
+	print(array)
+	return array
 
 func PickCardsFromDeck(amount):
 	var idx = 0

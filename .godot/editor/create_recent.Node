@@ -1,3 +1,13 @@
+Button
+PanelContainer
+ProgressBar
+HBoxContainer
+Panel
+Control
+CanvasLayer
+TextureProgressBar
+ItemList
+Label
 Camera2D
 Sprite2D
 AnimatedSprite2D

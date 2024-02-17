@@ -1,4 +1,6 @@
-res://Player.tscn
+res://Scenes/MainScene.tscn
+res://Scenes/Player.tscn
+res://Scenes/UI_Game.tscn
 res://Scripts/GameMode.gd
 res://Scripts/Player.gd
-res://MainScene.tscn
+res://Scripts/UIGame.gd
