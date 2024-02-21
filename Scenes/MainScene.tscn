@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dpv75dqas4i8x"]
+[gd_scene load_steps=3 format=3 uid="uid://dpv75dqas4i8x"]
 
 [ext_resource type="Script" path="res://Scripts/GameMode.gd" id="1_lsrxv"]
+[ext_resource type="Texture2D" uid="uid://b2lhbnviltqip" path="res://Assets/poker-table-made-green-cloth-600nw-1653402223.webp" id="2_4fukl"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -8,3 +9,8 @@
 script = ExtResource("1_lsrxv")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Poker-table-made-green-cloth-600Nw-1653402223" type="Sprite2D" parent="."]
+z_index = -1
+scale = Vector2(1.77, 1.77)
+texture = ExtResource("2_4fukl")

@@ -11,6 +11,8 @@ var players = []
 var actingPlayerIdx = 0
 var playerBets = [10,0,0,0,0]
 
+const playerLoc = [Vector2(450,-140),Vector2(330,190),Vector2(0,240),Vector2(-330,190),Vector2(-450,-140)]
+const tableCardsLoc = [Vector2(-100,0),Vector2(-50,0),Vector2(0,0),Vector2(50,0),Vector2(100,0)]
 enum PlayerStatus {pending, raised, folded, broke, allIn, check}
 
 
@@ -30,12 +32,11 @@ func SetupTable():
 	pass
 func SetupPlayers():
 	for i in 5:
-		const playerloc = [Vector2(0,0),Vector2(400,0),Vector2(-400,0),Vector2(0,400),Vector2(0,-400)]
 		var player_scene = preload("res://Scenes/Player.tscn")
 		player_scene = player_scene.instantiate()
 		add_child(player_scene)
 		players.append(Player.new())
-		players[i].Init(i, playerloc[i], player_scene, self)
+		players[i].Init(i, playerLoc[i], player_scene, self)
 
 func SetupDeck():
 	savedCardDeck = Deck.new().createCardDeck()
@@ -60,8 +61,9 @@ func EndTurn():
 	pass
 	
 func StartRound():
-
-	for player in players:
+	cardDeck = savedCardDeck
+	cardDeck.shuffle()
+	for player in players: #adds the players to a new round
 		if (player.chipsOwned != 0): #can the player play
 			playingPlayers.append(player)
 			player.status = PlayerStatus.pending
@@ -70,9 +72,14 @@ func StartRound():
 	smallBlind = IncrementInRange(smallBlind,0,playingPlayers.size()-1)
 	players[smallBlind].Raise(10)
 	players[bigBlind].Raise(20)
-	actingPlayerIdx=DecreaseInRange(smallBlind,0,playingPlayers.size()-1)
-	tableCards = PickCardsFromDeck(5)
-	if (playingPlayers.size() != 0):
+	actingPlayerIdx=DecreaseInRange(smallBlind,0,playingPlayers.size()-1) #sets the player who starts 
+	tableCards = PickCardsFromDeck(5) #gets 5 random card from the deck
+	var idx = 0
+	for card in tableCards: #spawn cards on the table
+		card.SetupScene(tableCardsLoc[idx],self)
+		idx += 1
+		
+	if (playingPlayers.size() != 0):#if no players are able to play then don't start 
 		StartTurn()
 
 func EndRound():
@@ -232,8 +239,10 @@ func GetAllPlayerStatuses():
 func PickCardsFromDeck(amount):
 	var idx = 0
 	var pickedCards = []
-	while (amount < idx):
-		pickedCards.append(cardDeck.pop_at(0))#removes the card from carddeck and adds it to pickedcards
+	while (amount > idx):
+		pickedCards.append(cardDeck[0])
+		cardDeck.pop_at(0)#removes the card from carddeck and adds it to pickedcards
+		idx += 1
 	return pickedCards
 
 func IncrementInRange(number,min, max):

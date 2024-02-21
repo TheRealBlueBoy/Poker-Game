@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cov16irhi6ul3"]
+
+[ext_resource type="Texture2D" uid="uid://c6hspv2g7tjxr" path="res://Assets/CardImg/StandardCard.jpg" id="1_cr17h"]
+
+[node name="CardScene" type="Node2D"]
+
+[node name="Sprite" type="Sprite2D" parent="."]
+scale = Vector2(0.265, 0.265)
+texture = ExtResource("1_cr17h")

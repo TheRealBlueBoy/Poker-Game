@@ -24,4 +24,5 @@ func addCardToDeck(number): #adds card of every type for the number to the deck
 	deck.append(StandardCard.new("c", number))
 	
 	
+
 	
