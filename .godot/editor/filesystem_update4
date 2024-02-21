@@ -1,14 +1,2 @@
-res://Scripts/Card.gd
-res://Scripts/StandardCard.gd
-res://Scenes/Card/MainScene.tscn
-res://Scripts/Deck.gd
-res://Scenes/Player.tscn
-res://Scenes/UI_Game.tscn
-res://Scenes/StandardCardScene.tscn
-res://Scenes/Card/CardScene.tscn
-res://Scenes/Card/StandardCard.tscn
-res://Scenes/Card/Card.tscn
 res://Scenes/MainScene.tscn
 res://Scripts/GameMode.gd
-res://Scripts/Player.gd
-res://Scripts/UIGame.gd

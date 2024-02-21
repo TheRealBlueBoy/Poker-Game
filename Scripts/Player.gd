@@ -6,6 +6,9 @@ var status = PlayerStatus.pending
 var index
 var child
 var gamemode
+var allCards = []
+var finalCards = []
+var finalScore #integer which gives a score to specific hands, used to decide a winner
 
 enum PlayerStatus {pending, raised, folded, broke, allIn}
 

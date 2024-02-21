@@ -26,7 +26,8 @@ func Setup():
 	SetupPlayers()
 	SetupDeck()
 	SetupUI()
-	StartRound()
+	#StartRound()
+	DecideWinner()
 
 func SetupTable():
 	pass
@@ -89,137 +90,119 @@ func EndRound():
 func RevealCard():
 	pass
 
-var allCards #array which stores the open cards on the table and the cards in the players hand
-var finalScore #integer which gives a score to specific hands, used to decide a winner
-var finalCards #stores the final 5 cards of a "hand"
+
+var allCardsPH = [] #a placeholder for the allcards array
+var finalCardsPH = [] #a placeholder for the finalCards array]\
+var winner
 
 func DecideWinner():
+	for player in players:
+		playingPlayers.append(player)
+	playingPlayers[0].hand.append(StandardCard.new("s", 2))
+	playingPlayers[0].hand.append(StandardCard.new("s", 3))
+	playingPlayers[1].hand.append(StandardCard.new("h", 3))
+	playingPlayers[1].hand.append(StandardCard.new("h", 4))
+	playingPlayers[2].hand.append(StandardCard.new("h", 6))
+	playingPlayers[2].hand.append(StandardCard.new("h", 7))
+	playingPlayers[3].hand.append(StandardCard.new("h", 8))
+	playingPlayers[3].hand.append(StandardCard.new("h", 9))
+	playingPlayers[4].hand.append(StandardCard.new("h", 10))
+	playingPlayers[4].hand.append(StandardCard.new("h", 11))
+	tableCards.append(StandardCard.new("s", 4))
+	tableCards.append(StandardCard.new("s", 6))
+	tableCards.append(StandardCard.new("d", 5))
+	tableCards.append(StandardCard.new("s", 8))
+	tableCards.append(StandardCard.new("h", 2))
+	
 	for player in playingPlayers:
-		finalScore = 0
-		allCards.append_array(tableCards)
-		allCards.append_array(player.hand)
-		allCards.sort_custom(SortAscending)
+		player.finalScore = 0
+		player.allCards.append_array(tableCards)
+		player.allCards.append_array(player.hand)
+		player.allCards.sort_custom(SortDescendingCard)
+		allCardsPH = player.allCards
+		
+		if StraightFlushChecker().size() == 5:
+			player.finalScore = 8
+			print(player.finalScore)
+		elif FourOfAKindChecker().size() == 4:
+			player.finalScore = 7
+			print(player.finalScore)
+		elif FullHouseChecker().size() == 5:
+			player.finalScore = 6
+			print(player.finalScore)
+		elif FlushChecker().size() == 5:
+			player.finalScore = 5
+			print(player.finalScore)
+		elif StraightChecker().size() == 5:
+			player.finalScore = 4
+			print(player.finalScore)
+		elif ThreeOfAKindChecker().size() == 3:
+			player.finalScore = 3
+			print(player.finalScore)
+		elif TwoPairChecker().size() == 4:
+			player.finalScore = 2
+			print(player.finalScore)
+		elif OnePairChecker().size() == 2:
+			player.finalScore = 1
+			print(player.finalScore)
+		print(player.finalScore)
+		player.finalCards = finalCardsPH
+		for card in player.finalCards:
+			print(card.type)
+	playingPlayers.sort_custom(SortDescendingPlayer)
+	var tiedPlayers = []
+	if playingPlayers[0].finalScore == playingPlayers[1].finalScore:
+		if playingPlayers[1].finalScore == playingPlayers[2].finalScore:
+			if playingPlayers[2].finalScore == playingPlayers[3].finalScore:
+				if playingPlayers[3].finalScore == playingPlayers[4].finalScore:
+					print("tie between all 5 players")
+				tiedPlayers.append(playingPlayers[0].index)
+				tiedPlayers.append(playingPlayers[1].index)
+				tiedPlayers.append(playingPlayers[2].index)
+				tiedPlayers.append(playingPlayers[3].index)
+				print("tie between player x, x, x and x")
+			tiedPlayers.append(playingPlayers[0].index)
+			tiedPlayers.append(playingPlayers[1].index)
+			tiedPlayers.append(playingPlayers[2].index)
+			print("tie between player x, x and x")
+		tiedPlayers.append(playingPlayers[0].index)
+		tiedPlayers.append(playingPlayers[1].index)
+		print("tie between player x and x")
+	winner = playingPlayers[0].index
+	print(winner)
 	
 
 func DealCards():
 	for player in playingPlayers:
 		player.hand = PickCardsFromDeck(2) #cards
 
-func SortAscending(a, b):
-	if a.StandardCard.number < b.StandardCard.number:
-		return true
-	return false
-
-var temporaryCards
-func StraightflushChecker():
-	StraightCheckerTemplate(temporaryCards, false)
-	TypeChecker(temporaryCards)
-	if heartCards >= 5:
-		finalCards.append_array(heartCards)
-		return true
-	if spadeCards >= 5:
-		finalCards.append_array(spadeCards)
-		return true
-	if clubCards >= 5:
-		finalCards.append_array(clubCards)
-		return true
-	if diamondCards >= 5:
-		finalCards.append_array(diamondCards)
-		return true
-	return false
-
-func FourOfAKindChecker():
-	if PairChecker("four") == 4:
+func SortDescendingCard(a, b):
+	if a.number > b.number:
 		return true
 	return false
 	
-func FullHouseChecker():
-	#still need to make logic
-	return false
-
-func FlushChecker():
-	TypeChecker(allCards)
-	if heartCards >= 5:
-		finalCards.append_array(heartCards)
-		return true
-	if spadeCards >= 5:
-		finalCards.append_array(spadeCards)
-		return true
-	if clubCards >= 5:
-		finalCards.append_array(clubCards)
-		return true
-	if diamondCards >= 5:
-		finalCards.append_array(diamondCards)
+func SortDescendingPlayer(a, b):
+	if a.finalScore > b.finalScore:
 		return true
 	return false
 
-func StraightChecker():
-	StraightCheckerTemplate(finalCards, true)
-
-func ThreeOfAKindChecker():
-	if PairChecker("three") == 3:
-		return true
-	return false
-
-func TwoPairChecker():
-	#still need to make logic
-	return false
-
-func OnePairChecker():
-	if PairChecker("twoo") == 2:
-		return true
-	return false
-
-func StraightCheckerTemplate(saver, end):
+func StraightFlushChecker():
+	var temporaryCards = []
 	for i in 3:
-		if allCards[i].number + 1 == allCards[i+1].number:
-			if allCards[i+1].number + 1 == allCards[i+2].number:
-				if allCards [i+2].number + 1 == allCards[i+3].number:
-					if allCards[i+3].number + 1 == allCards[i+4].number:
-						saver.append(allCards[i])
-						saver.append(allCards[i+1])
-						saver.append(allCards[i+2])
-						saver.append(allCards[i+3])
-						saver.append(allCards[i+4])
-						if end == true:
-							return true
-	if end == true:
-		return false
-
-
-func PairChecker(string):
-	var pairScore = 0
-	for i in 6:
-		if allCards[i].number == allCards[i+1].number:
-			pairScore = 2
-			if string.to_lower() == "two":
-				finalCards.append(allCards[i])
-				finalCards.append(allCards[i+1])
-			if i <= 4:
-				if allCards [i+1].number == allCards[i+2].number:
-					pairScore = 3
-					if string.to_lower() == "three":
-						finalCards.append(allCards[i])
-						finalCards.append(allCards[i+1])
-						finalCards.append(allCards[i+2])
-					if i <= 3:
-						if allCards[i+2].number == allCards[i+3].number:
-							pairScore = 4
-							if string.to_lower() == "four":
-								finalCards.append(allCards[i])
-								finalCards.append(allCards[i+1])
-								finalCards.append(allCards[i+2])
-								finalCards.append(allCards[i+3])
-	return pairScore
-
-#array of cards of the same type
-var heartCards
-var spadeCards
-var clubCards
-var diamondCards
-
-func TypeChecker(set):
-	for card in set:
+		if allCardsPH[i].number - 1 == allCardsPH[i+1].number:
+			if allCardsPH[i+1].number - 1 == allCardsPH[i+2].number:
+				if allCardsPH [i+2].number - 1 == allCardsPH[i+3].number:
+					if allCardsPH[i+3].number - 1 == allCardsPH[i+4].number:
+						temporaryCards.append(allCardsPH[i])
+						temporaryCards.append(allCardsPH[i+1])
+						temporaryCards.append(allCardsPH[i+2])
+						temporaryCards.append(allCardsPH[i+3])
+						temporaryCards.append(allCardsPH[i+4])
+	var heartCards = []
+	var spadeCards = []
+	var clubCards = []
+	var diamondCards = []
+	for card in temporaryCards:
 		if card.type == "h":
 			heartCards.append(card)
 		if card.type == "s":
@@ -228,6 +211,87 @@ func TypeChecker(set):
 			clubCards.append(card)
 		if card.type == "d":
 			diamondCards.append(card)
+	if heartCards.size() >= 5:
+		finalCardsPH.append_array(heartCards)
+	if spadeCards.size() >= 5:
+		finalCardsPH.append_array(spadeCards)
+	if clubCards.size() >= 5:
+		finalCardsPH.append_array(clubCards)
+	if diamondCards.size() >= 5:
+		finalCardsPH.append_array(diamondCards)
+	return finalCardsPH
+
+func FourOfAKindChecker():
+	for i in 4:
+		if allCardsPH[i].number == allCardsPH[i+1].number:
+				if allCardsPH [i+1].number == allCardsPH[i+2].number:
+						if allCardsPH[i+2].number == allCardsPH[i+3].number:
+							finalCardsPH.append(allCardsPH[i])
+							finalCardsPH.append(allCardsPH[i+1])
+							finalCardsPH.append(allCardsPH[i+2])
+							finalCardsPH.append(allCardsPH[i+3])
+	return finalCardsPH
+	
+func FullHouseChecker():
+	#still need to make logic
+	return finalCardsPH
+
+func FlushChecker():
+	var heartCards = []
+	var spadeCards = []
+	var clubCards = []
+	var diamondCards = []
+	for card in allCardsPH:
+		if card.type == "h":
+			heartCards.append(card)
+		if card.type == "s":
+			spadeCards.append(card)
+		if card.type == "s":
+			clubCards.append(card)
+		if card.type == "d":
+			diamondCards.append(card)
+	if heartCards.size() >= 5:
+		finalCardsPH.append_array(heartCards)
+	if spadeCards.size() >= 5:
+		finalCardsPH.append_array(spadeCards)
+	if clubCards.size() >= 5:
+		finalCardsPH.append_array(clubCards)
+	if diamondCards.size() >= 5:
+		finalCardsPH.append_array(diamondCards)
+	return finalCardsPH
+
+func StraightChecker():
+	for i in 3:
+		if allCardsPH[i].number - 1 == allCardsPH[i+1].number:
+			if allCardsPH[i+1].number - 1 == allCardsPH[i+2].number:
+				if allCardsPH [i+2].number - 1 == allCardsPH[i+3].number:
+					if allCardsPH[i+3].number - 1 == allCardsPH[i+4].number:
+						finalCardsPH.append(allCardsPH[i])
+						finalCardsPH.append(allCardsPH[i+1])
+						finalCardsPH.append(allCardsPH[i+2])
+						finalCardsPH.append(allCardsPH[i+3])
+						finalCardsPH.append(allCardsPH[i+4])
+	return finalCardsPH
+
+func ThreeOfAKindChecker():
+	for i in 5:
+		if allCardsPH[i].number == allCardsPH[i+1].number:
+				if allCardsPH [i+1].number == allCardsPH[i+2].number:
+						finalCardsPH.append(allCardsPH[i])
+						finalCardsPH.append(allCardsPH[i+1])
+						finalCardsPH.append(allCardsPH[i+2])
+	return finalCardsPH
+
+func TwoPairChecker():
+	#still need to make logic
+	return finalCardsPH
+
+func OnePairChecker():
+	for i in 6:
+		if allCardsPH[i].number == allCardsPH[i+1].number:
+			finalCardsPH.append(allCardsPH[i])
+			finalCardsPH.append(allCardsPH[i+1])
+	return finalCardsPH
 
 func GetAllPlayerStatuses():
 	var array
