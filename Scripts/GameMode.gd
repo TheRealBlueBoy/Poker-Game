@@ -92,29 +92,30 @@ func RevealCard():
 
 
 var allCardsPH = [] #a placeholder for the allcards array
-var finalCardsPH = [] #a placeholder for the finalCards array]\
+var finalCardsPH = [] #a placeholder for the finalCards array
 var winner
 
 func DecideWinner():
 	for player in players:
 		playingPlayers.append(player)
-	playingPlayers[0].hand.append(StandardCard.new("s", 2))
-	playingPlayers[0].hand.append(StandardCard.new("s", 3))
-	playingPlayers[1].hand.append(StandardCard.new("h", 3))
-	playingPlayers[1].hand.append(StandardCard.new("h", 4))
+	playingPlayers[0].hand.append(StandardCard.new("h", 2))
+	playingPlayers[0].hand.append(StandardCard.new("h", 3))
+	playingPlayers[1].hand.append(StandardCard.new("s", 3))
+	playingPlayers[1].hand.append(StandardCard.new("s", 4))
 	playingPlayers[2].hand.append(StandardCard.new("h", 6))
 	playingPlayers[2].hand.append(StandardCard.new("h", 7))
 	playingPlayers[3].hand.append(StandardCard.new("h", 8))
 	playingPlayers[3].hand.append(StandardCard.new("h", 9))
 	playingPlayers[4].hand.append(StandardCard.new("h", 10))
 	playingPlayers[4].hand.append(StandardCard.new("h", 11))
-	tableCards.append(StandardCard.new("s", 4))
+	tableCards.append(StandardCard.new("d", 4))
 	tableCards.append(StandardCard.new("s", 6))
-	tableCards.append(StandardCard.new("d", 5))
+	tableCards.append(StandardCard.new("s", 5))
 	tableCards.append(StandardCard.new("s", 8))
 	tableCards.append(StandardCard.new("h", 2))
 	
 	for player in playingPlayers:
+		finalCardsPH = []
 		player.finalScore = 0
 		player.allCards.append_array(tableCards)
 		player.allCards.append_array(player.hand)
@@ -123,32 +124,21 @@ func DecideWinner():
 		
 		if StraightFlushChecker().size() == 5:
 			player.finalScore = 8
-			print(player.finalScore)
 		elif FourOfAKindChecker().size() == 4:
 			player.finalScore = 7
-			print(player.finalScore)
 		elif FullHouseChecker().size() == 5:
 			player.finalScore = 6
-			print(player.finalScore)
-		elif FlushChecker().size() == 5:
+		elif FlushChecker().size() >= 5:
 			player.finalScore = 5
-			print(player.finalScore)
 		elif StraightChecker().size() == 5:
 			player.finalScore = 4
-			print(player.finalScore)
 		elif ThreeOfAKindChecker().size() == 3:
 			player.finalScore = 3
-			print(player.finalScore)
 		elif TwoPairChecker().size() == 4:
 			player.finalScore = 2
-			print(player.finalScore)
 		elif OnePairChecker().size() == 2:
 			player.finalScore = 1
-			print(player.finalScore)
-		print(player.finalScore)
 		player.finalCards = finalCardsPH
-		for card in player.finalCards:
-			print(card.type)
 	playingPlayers.sort_custom(SortDescendingPlayer)
 	var tiedPlayers = []
 	if playingPlayers[0].finalScore == playingPlayers[1].finalScore:
@@ -169,7 +159,8 @@ func DecideWinner():
 		tiedPlayers.append(playingPlayers[1].index)
 		print("tie between player x and x")
 	winner = playingPlayers[0].index
-	print(winner)
+	print("The winner is player: ")
+	print(winner + 1)
 	
 
 func DealCards():
