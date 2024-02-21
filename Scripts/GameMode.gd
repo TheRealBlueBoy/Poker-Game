@@ -9,7 +9,7 @@ var gameUI
 var playingPlayers = []
 var players = []
 var actingPlayerIdx = 0
-var playerBets = [10,0,0,0,0]
+var playerBets = [0,0,0,0,0]
 
 const playerLoc = [Vector2(450,-140),Vector2(330,190),Vector2(0,240),Vector2(-330,190),Vector2(-450,-140)]
 const tableCardsLoc = [Vector2(-100,0),Vector2(-50,0),Vector2(0,0),Vector2(50,0),Vector2(100,0)]

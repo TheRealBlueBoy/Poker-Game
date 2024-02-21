@@ -11,3 +11,4 @@ res://Scenes/Card/Card.tscn
 res://Scenes/MainScene.tscn
 res://Scripts/GameMode.gd
 res://Scripts/Player.gd
+res://Scripts/UIGame.gd

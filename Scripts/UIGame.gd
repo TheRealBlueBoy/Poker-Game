@@ -63,18 +63,23 @@ func updateRaiseBar():
 
 func _on_fold_button_pressed():
 	gameMode.playingPlayers[actingPlayerIdx].Fold()
+	gameMode.EndTurn()
 
 func _on_check_call_button_pressed():
 	if(gameMode.playerBets.max() == gameMode.playerBets[actingPlayerIdx]):
 		gameMode.playingPlayers[actingPlayerIdx].Check()
+		gameMode.EndTurn()
 	elif((gameMode.playerBets.max()-gameMode.playerBets[actingPlayerIdx]) < gameMode.playingPlayers[actingPlayerIdx].chipsOwned):#does player have enough chips to call?
 		gameMode.playingPlayers[actingPlayerIdx].AllIn()
+		gameMode.EndTurn()
 	else:
 		gameMode.playingPlayers[actingPlayerIdx].Call(gameMode.playingPlayers[actingPlayerIdx].chipsOwned)#shows the amount you need to add to go even with the raised amount
+		gameMode.EndTurn()
 
 func _on_raise_button_pressed():
 	if(raiseBar.visible):
 		gameMode.playingPlayers[actingPlayerIdx].Raise(raiseBar.value * gameMode.playingPlayers[actingPlayerIdx].chipsOwned)
+		gameMode.EndTurn()
 	else:
 		SetRaiseBarVisibility(true)
 	
