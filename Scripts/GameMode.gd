@@ -224,9 +224,23 @@ func FourOfAKindChecker():
 	return finalCardsPH
 	
 func FullHouseChecker():
-	#still need to make logic
+	var temporaryCards = []
+	temporaryCards = allCardsPH
+	for i in 5:
+		if allCardsPH[i].number == allCardsPH[i+1].number:
+			if allCardsPH [i+1].number == allCardsPH[i+2].number:
+				finalCardsPH.append(allCardsPH[i])
+				finalCardsPH.append(allCardsPH[i+1])
+				finalCardsPH.append(allCardsPH[i+2])
+				temporaryCards.remove_at(i)
+				temporaryCards.remove_at(i+1)
+				temporaryCards.remove_at(i+2)
+	for i in 3:
+		if temporaryCards[i].number == temporaryCards[i+1].number:
+			finalCardsPH.append(temporaryCards[i])
+			finalCardsPH.append(temporaryCards[i+1])
 	return finalCardsPH
-
+	
 func FlushChecker():
 	var heartCards = []
 	var spadeCards = []
@@ -274,7 +288,18 @@ func ThreeOfAKindChecker():
 	return finalCardsPH
 
 func TwoPairChecker():
-	#still need to make logic
+	var temporaryCards = []
+	temporaryCards = allCardsPH
+	for i in 6:
+		if allCardsPH[i].number == allCardsPH[i+1].number:
+			finalCardsPH.append(allCardsPH[i])
+			finalCardsPH.append(allCardsPH[i+1])
+			temporaryCards.remove_at(i)
+			temporaryCards.remove_at(i+1)
+	for i in 4:
+		if temporaryCards[i].number == temporaryCards[i+1].number:
+			finalCardsPH.append(temporaryCards[i])
+			finalCardsPH.append(temporaryCards[i+1])
 	return finalCardsPH
 
 func OnePairChecker():
