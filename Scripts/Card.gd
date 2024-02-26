@@ -4,7 +4,7 @@ var cardFrontTexture = preload("res://Assets/CardImg/StandardCard.jpg")
 var cardBackTexture = preload("res://Assets/CardImg/CardBack.jpg")
 var scene
 
-func SetupScene(loc, gm):
+func SetupScene(loc, gm):#spawns the card
 	scene = preload("res://Scenes/Card/Card.tscn")
 	scene = scene.instantiate()
 	scene.position = loc

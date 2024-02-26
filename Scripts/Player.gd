@@ -12,15 +12,12 @@ var finalScore #integer which gives a score to specific hands, used to decide a 
 
 enum PlayerStatus {pending, raised, folded, broke, allIn}
 
-func Init(i, loc, c, gm):
+func Init(i, loc, c, gm):#calls when made
 	child = c
 	child.position = loc
 	index = i 
 	gamemode = gm
 	
-	
-func _ready():
-	pass
 	
 func Call(amount):
 	pass

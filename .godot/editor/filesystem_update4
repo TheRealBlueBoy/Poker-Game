@@ -1,2 +1,4 @@
-res://Scenes/MainScene.tscn
+res://Scripts/Card.gd
 res://Scripts/GameMode.gd
+res://Scripts/Player.gd
+res://Scripts/UIGame.gd

@@ -1,18 +1,18 @@
 class_name GameMode extends Node2D
-var savedCardDeck = []
-var cardDeck = []
-var bigBlind = 0
-var smallBlind = 1
-var tableCards = []
+var savedCardDeck = [] #template deck
+var cardDeck = [] #deck of cards in the round
+var bigBlind = 0 #forced amount of big blind
+var smallBlind = 1 #forced amount of small blind
+var tableCards = [] #5 cards on the table
 var gameUI
 
-var playingPlayers = []
-var players = []
-var actingPlayerIdx = 0
-var playerBets = [0,0,0,0,0]
+var playingPlayers = [] #players who are playing in the round
+var players = [] #players who are sitting at the table
+var actingPlayerIdx = 0 #player who's turn it is
+var playerBets = [0,0,0,0,0] #amount each player bet
 
-const playerLoc = [Vector2(450,-140),Vector2(330,190),Vector2(0,240),Vector2(-330,190),Vector2(-450,-140)]
-const tableCardsLoc = [Vector2(-100,0),Vector2(-50,0),Vector2(0,0),Vector2(50,0),Vector2(100,0)]
+const playerLoc = [Vector2(450,-140),Vector2(330,190),Vector2(0,240),Vector2(-330,190),Vector2(-450,-140)] #player spawn loc
+const tableCardsLoc = [Vector2(-100,0),Vector2(-50,0),Vector2(0,0),Vector2(50,0),Vector2(100,0)] #table cards spawn loc
 enum PlayerStatus {pending, raised, folded, broke, allIn, check}
 
 
@@ -62,6 +62,7 @@ func EndTurn():
 	pass
 	
 func StartRound():
+	playerBets = [0,0,0,0,0]
 	cardDeck = savedCardDeck
 	cardDeck.shuffle()
 	for player in players: #adds the players to a new round

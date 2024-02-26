@@ -13,6 +13,7 @@ var raiseButton
 # Called when the node enters the scene tree for the first time.
 	
 func Init(gm):
+	#gets all components and sets vars up
 	gameMode = gm
 	raiseBar = find_child("RaiseBar")
 	raiseBarInteractable = find_child("RaiseBarInteractable")
@@ -33,10 +34,11 @@ func Hide():
 func Show():
 	visible = true
 	
-func ChangePlayer(newIdx):
+func ChangePlayer(newIdx):#refresh ui with playeridx as input
 	SetRaiseBarVisibility(false)
 	actingPlayerIdx = newIdx
-	if(gameMode.playerBets.max() == gameMode.playerBets[actingPlayerIdx]):
+	#decides what to show under circumstances
+	if(gameMode.playerBets.max() == gameMode.playerBets[actingPlayerIdx]):#are the bets not raised
 		call_checkButton.text = "check"
 	elif((gameMode.playerBets.max()-gameMode.playerBets[actingPlayerIdx]) < gameMode.playingPlayers[actingPlayerIdx].chipsOwned):#does player have enough chips to call?
 		call_checkButton.text = ("call(%d)"%(gameMode.playerBets.max()-gameMode.playerBets[actingPlayerIdx]))#shows the amount you need to add to go even with the raised amount
@@ -54,7 +56,7 @@ func _on_raise_bar_interactable_button_down():
 func _on_raise_bar_interactable_button_up():
 	updateRaiseBarBool = false
 	
-func updateRaiseBar():
+func updateRaiseBar():#sets the percentage of the bar to the position of the mouse when holding the button in range of boundries
 	var mousePos = get_viewport().get_mouse_position().y
 	var newPosition = clamp(mousePos, raiseBarMin_yPosition, raiseBarMax_yPosition) #makes sure the new position isn't out of bounds
 	var percantage = (raiseBarMax_yPosition-newPosition)/(raiseBarMax_yPosition-raiseBarMin_yPosition)
