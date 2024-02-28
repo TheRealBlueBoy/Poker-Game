@@ -14,7 +14,6 @@ func _init(Itype, Inumber):
 		cardFrontTexture = preload("res://Assets/CardImg/Clover.jpg")
 	elif (type == "s"):
 		cardFrontTexture = preload("res://Assets/CardImg/Spades.jpg")
-	
 
 
 func SetupScene(loc, gm):

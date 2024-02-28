@@ -11,6 +11,7 @@ func SetupScene(loc, gm):#spawns the card
 	scene.find_child("Sprite").texture = cardBackTexture
 	gm.add_child(scene)
 	
+	
 func Reveal():
 	scene.find_child("Sprite").texture = cardFrontTexture
 func Hide():

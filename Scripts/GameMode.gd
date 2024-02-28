@@ -26,8 +26,8 @@ func Setup():
 	SetupPlayers()
 	SetupDeck()
 	SetupUI()
-	#StartRound()
-	DecideWinner()
+	StartRound()
+	#DecideWinner()
 
 func SetupTable():
 	pass
@@ -57,18 +57,30 @@ func StartTurn():
 	gameUI.ChangePlayer(actingPlayerIdx)
 	if (playingPlayers[actingPlayerIdx].status == PlayerStatus.allIn): #skips the turn if player is allin
 		EndTurn()
-	
+	for player in players:
+		for cards in player.hand:
+			actingPlayerIdx.Reveal(cards)
+
+
 func EndTurn():
-	pass
+		for player in players:
+			for cards in player.hand:
+				players.hide(cards)
+				pass
 	
 func StartRound():
 	playerBets = [0,0,0,0,0]
 	cardDeck = savedCardDeck
 	cardDeck.shuffle()
+	var idx = 0
 	for player in players: #adds the players to a new round
 		if (player.chipsOwned != 0): #can the player play
 			playingPlayers.append(player)
 			player.status = PlayerStatus.pending
+			player.hand = PickCardsFromDeck(2)
+			player.hand[0].SetupScene(playerLoc[idx]+Vector2(-50,0), self)
+			player.hand[1].SetupScene(playerLoc[idx]+Vector2(50,0), self)
+			idx += 1
 	#rotate blinds
 	bigBlind = IncrementInRange(bigBlind,0,playingPlayers.size()-1)
 	smallBlind = IncrementInRange(smallBlind,0,playingPlayers.size()-1)
@@ -76,7 +88,7 @@ func StartRound():
 	players[bigBlind].Raise(20)
 	actingPlayerIdx=DecreaseInRange(smallBlind,0,playingPlayers.size()-1) #sets the player who starts 
 	tableCards = PickCardsFromDeck(5) #gets 5 random card from the deck
-	var idx = 0
+	idx = 0
 	for card in tableCards: #spawn cards on the table
 		card.SetupScene(tableCardsLoc[idx],self)
 		idx += 1
@@ -291,7 +303,7 @@ func ThreeOfAKindChecker():
 func TwoPairChecker():
 	var temporaryCards = []
 	temporaryCards = allCardsPH
-	for i in 6:
+	for i in 4:
 		if allCardsPH[i].number == allCardsPH[i+1].number:
 			finalCardsPH.append(allCardsPH[i])
 			finalCardsPH.append(allCardsPH[i+1])
