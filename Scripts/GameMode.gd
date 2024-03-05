@@ -53,20 +53,19 @@ func SetupUI():
 	
 #gamecycle
 func StartTurn():
-	actingPlayerIdx=IncrementInRange(actingPlayerIdx,0,playingPlayers.size()-1)
+	actingPlayerIdx=IncrementInRange(actingPlayerIdx,0,playingPlayers.size())
 	gameUI.ChangePlayer(actingPlayerIdx)
 	if (playingPlayers[actingPlayerIdx].status == PlayerStatus.allIn): #skips the turn if player is allin
 		EndTurn()
-	for player in players:
-		for cards in player.hand:
-			actingPlayerIdx.Reveal(cards)
+	for card in playingPlayers[actingPlayerIdx].hand:
+			card.Reveal()
 
 
 func EndTurn():
-		for player in players:
-			for cards in player.hand:
-				players.hide(cards)
-				pass
+	for player in players:
+		for card in player.hand:
+			card.Hide()
+	StartTurn()
 	
 func StartRound():
 	playerBets = [0,0,0,0,0]

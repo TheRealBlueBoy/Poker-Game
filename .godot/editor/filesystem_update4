@@ -1,5 +1,2 @@
 res://Scenes/MainScene.tscn
 res://Scripts/GameMode.gd
-res://Scripts/Card.gd
-res://Scripts/StandardCard.gd
-res://Scripts/Player.gd
