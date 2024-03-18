@@ -77,8 +77,9 @@ func StartRound():
 			playingPlayers.append(player)
 			player.status = PlayerStatus.pending
 			player.hand = PickCardsFromDeck(2)
-			player.hand[0].SetupScene(playerLoc[idx]+Vector2(-50,-50), self)
-			player.hand[1].SetupScene(playerLoc[idx]+Vector2(50,-50), self)
+			#spawn cards with an offset from the player
+			player.hand[0].SetupScene(playerLoc[idx]+Vector2(-50,0), self)
+			player.hand[1].SetupScene(playerLoc[idx]+Vector2(50,0), self)
 			idx += 1
 	#rotate blinds
 	bigBlind = IncrementInRange(bigBlind,0,playingPlayers.size()-1)

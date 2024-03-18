@@ -24,7 +24,7 @@ func SetupScene(loc, gm):
 	scene.find_child("number").text = NumberToText(number)
 	gm.add_child(scene)
 	
-func NumberToText(n):
+func NumberToText(n):#converts card id to text
 	const Text = {11: "J", 12:"Q",13:"K",14:"A"}
 	if (n < 11):
 		return str(n)
