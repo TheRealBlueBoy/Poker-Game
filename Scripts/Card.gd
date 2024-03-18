@@ -1,7 +1,7 @@
 class_name Card
 
 var cardFrontTexture = preload("res://Assets/CardImg/StandardCard.jpg")
-var cardBackTexture = preload("res://Assets/CardImg/CardBack.jpg")
+var cardBackTexture = preload("res://Assets/CardImg/CardBack.png")
 var scene
 
 func SetupScene(loc, gm):#spawns the card
@@ -10,7 +10,7 @@ func SetupScene(loc, gm):#spawns the card
 	scene.position = loc
 	scene.find_child("Sprite").texture = cardBackTexture
 	gm.add_child(scene)
-	
+
 	
 func Reveal():
 	scene.find_child("Sprite").texture = cardFrontTexture

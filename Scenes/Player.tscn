@@ -1,10 +1,25 @@
-[gd_scene load_steps=3 format=3 uid="uid://dcn0e4p1sw114"]
+[gd_scene load_steps=4 format=3 uid="uid://dcn0e4p1sw114"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_is1io"]
-[ext_resource type="Texture2D" uid="uid://fc54bpcgrm0f" path="res://Assets/playerSprite.jpg" id="2_tbjj8"]
+[ext_resource type="Texture2D" uid="uid://cg247fjvo2tqa" path="res://Assets/PlayerSprites/Player_unicorn.png" id="2_j4v7i"]
+
+[sub_resource type="GDScript" id="GDScript_yf5o6"]
+script/source = "extends Sprite2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+"
 
 [node name="Player" type="Node2D"]
 script = ExtResource("1_is1io")
 
 [node name="PlayerSprite" type="Sprite2D" parent="."]
-texture = ExtResource("2_tbjj8")
+texture = ExtResource("2_j4v7i")
+script = SubResource("GDScript_yf5o6")

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bxcsemfla2237"
-path="res://.godot/imported/CardBack.jpg-42ce9317fd752e2f7f9c63bbde134f2f.ctex"
+uid="uid://bo2slan4dfndo"
+path="res://.godot/imported/Player_propellorhat.png-19759e3d8a59a49a1e6909409f77ca55.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/CardImg/CardBack.jpg"
-dest_files=["res://.godot/imported/CardBack.jpg-42ce9317fd752e2f7f9c63bbde134f2f.ctex"]
+source_file="res://Assets/PlayerSprites/Player_propellorhat.png"
+dest_files=["res://.godot/imported/Player_propellorhat.png-19759e3d8a59a49a1e6909409f77ca55.ctex"]
 
 [params]
 

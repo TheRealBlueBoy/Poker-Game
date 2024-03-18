@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dgr2111a3fq3g"
-path="res://.godot/imported/Clover.jpg-ea136b60aff7fadb3a99bef429f71741.ctex"
+uid="uid://c2ynagv314cn"
+path="res://.godot/imported/CardBack.png-1c6340c06e433bc5ce64df5fe084d400.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/CardImg/Clover.jpg"
-dest_files=["res://.godot/imported/Clover.jpg-ea136b60aff7fadb3a99bef429f71741.ctex"]
+source_file="res://Assets/CardImg/CardBack.png"
+dest_files=["res://.godot/imported/CardBack.png-1c6340c06e433bc5ce64df5fe084d400.ctex"]
 
 [params]
 

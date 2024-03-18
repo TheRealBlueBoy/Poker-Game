@@ -7,13 +7,13 @@ func _init(Itype, Inumber):
 	number = Inumber
 	type = Itype
 	if (type == "h"): #sets the image depending on the type
-		cardFrontTexture = preload("res://Assets/CardImg/Hearts.jpg")
+		cardFrontTexture = preload("res://Assets/CardImg/Hearts.png")
 	elif (type == "d"):
-		cardFrontTexture = preload("res://Assets/CardImg/daimonds.jpg")
+		cardFrontTexture = preload("res://Assets/CardImg/Diamonds.png")
 	elif (type == "c"):
-		cardFrontTexture = preload("res://Assets/CardImg/Clover.jpg")
+		cardFrontTexture = preload("res://Assets/CardImg/Clover.png")
 	elif (type == "s"):
-		cardFrontTexture = preload("res://Assets/CardImg/Spades.jpg")
+		cardFrontTexture = preload("res://Assets/CardImg/Spades.png")
 
 
 func SetupScene(loc, gm):

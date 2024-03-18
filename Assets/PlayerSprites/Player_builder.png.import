@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0bfl0erygeca"
-path="res://.godot/imported/daimonds.jpg-a2d357a9af1d85f3262aa73d1c96b022.ctex"
+uid="uid://cw1mhpgxlpm0m"
+path="res://.godot/imported/Player_builder.png-3b8c4396bdc9f347eb3ee3d7a47fd4d8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/CardImg/daimonds.jpg"
-dest_files=["res://.godot/imported/daimonds.jpg-a2d357a9af1d85f3262aa73d1c96b022.ctex"]
+source_file="res://Assets/PlayerSprites/Player_builder.png"
+dest_files=["res://.godot/imported/Player_builder.png-3b8c4396bdc9f347eb3ee3d7a47fd4d8.ctex"]
 
 [params]
 
