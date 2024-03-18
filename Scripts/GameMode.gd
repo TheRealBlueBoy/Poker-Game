@@ -11,7 +11,7 @@ var players = [] #players who are sitting at the table
 var actingPlayerIdx = 0 #player who's turn it is
 var playerBets = [0,0,0,0,0] #amount each player bet
 
-const playerLoc = [Vector2(450,-140),Vector2(330,190),Vector2(0,240),Vector2(-330,190),Vector2(-450,-140)] #player spawn loc
+const playerLoc = [Vector2(450,-50),Vector2(330,180),Vector2(0,240),Vector2(-330,180),Vector2(-450,-50)] #player spawn loc
 const tableCardsLoc = [Vector2(-100,0),Vector2(-50,0),Vector2(0,0),Vector2(50,0),Vector2(100,0)] #table cards spawn loc
 enum PlayerStatus {pending, raised, folded, broke, allIn, check}
 
@@ -77,8 +77,8 @@ func StartRound():
 			playingPlayers.append(player)
 			player.status = PlayerStatus.pending
 			player.hand = PickCardsFromDeck(2)
-			player.hand[0].SetupScene(playerLoc[idx]+Vector2(-50,0), self)
-			player.hand[1].SetupScene(playerLoc[idx]+Vector2(50,0), self)
+			player.hand[0].SetupScene(playerLoc[idx]+Vector2(-50,-50), self)
+			player.hand[1].SetupScene(playerLoc[idx]+Vector2(50,-50), self)
 			idx += 1
 	#rotate blinds
 	bigBlind = IncrementInRange(bigBlind,0,playingPlayers.size()-1)
@@ -110,21 +110,6 @@ var winner
 func DecideWinner():
 	for player in players:
 		playingPlayers.append(player)
-	playingPlayers[0].hand.append(StandardCard.new("h", 2))
-	playingPlayers[0].hand.append(StandardCard.new("h", 3))
-	playingPlayers[1].hand.append(StandardCard.new("s", 3))
-	playingPlayers[1].hand.append(StandardCard.new("s", 4))
-	playingPlayers[2].hand.append(StandardCard.new("h", 6))
-	playingPlayers[2].hand.append(StandardCard.new("h", 7))
-	playingPlayers[3].hand.append(StandardCard.new("h", 8))
-	playingPlayers[3].hand.append(StandardCard.new("h", 9))
-	playingPlayers[4].hand.append(StandardCard.new("h", 10))
-	playingPlayers[4].hand.append(StandardCard.new("h", 11))
-	tableCards.append(StandardCard.new("d", 4))
-	tableCards.append(StandardCard.new("s", 6))
-	tableCards.append(StandardCard.new("s", 5))
-	tableCards.append(StandardCard.new("s", 8))
-	tableCards.append(StandardCard.new("h", 2))
 	
 	for player in playingPlayers:
 		finalCardsPH = []

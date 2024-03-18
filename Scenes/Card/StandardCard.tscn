@@ -5,11 +5,11 @@
 [node name="StandardCardScene" type="Node2D"]
 
 [node name="CardScene" parent="." instance=ExtResource("1_071cs")]
+scale = Vector2(0.2, 0.2)
 
 [node name="number" type="Label" parent="."]
 visible = false
-offset_left = -88.0
-offset_top = -128.0
-offset_right = -48.0
-offset_bottom = -105.0
+offset_left = -40.0
+offset_top = -70.0
+offset_bottom = -47.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)

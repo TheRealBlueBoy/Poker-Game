@@ -9,6 +9,7 @@
 script = ExtResource("1_lsrxv")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+z_index = 4
 
 [node name="Poker-table-made-green-cloth-600Nw-1653402223" type="Sprite2D" parent="."]
 z_index = -1
