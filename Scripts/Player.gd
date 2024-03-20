@@ -12,7 +12,7 @@ var allCards = []
 var finalCards = []
 var finalScore #integer which gives a score to specific hands, used to decide a winner
 
-enum PlayerStatus {pending, raised, folded, broke, allIn}
+enum PlayerStatus {pending, raised, folded, broke, allIn, checked}
 
 func Init(i, loc, c, gm):#calls when made
 	child = c
@@ -22,12 +22,18 @@ func Init(i, loc, c, gm):#calls when made
 	
 	
 func Call(amount):
-	pass
+	status = PlayerStatus.checked
+	
 func Check():
-	pass
+	status = PlayerStatus.checked
+	
 func Fold():
-	pass
+	status = PlayerStatus.folded
+
 func Raise(amount):
-	pass
+	gamemode.ResetPlayerStatuses()
+	status = PlayerStatus.checked
+
 func AllIn():
-	pass
+	gamemode.ResetPlayerStatuses()
+	status = PlayerStatus.checked

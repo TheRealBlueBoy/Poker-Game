@@ -1,8 +1,8 @@
 class_name GameMode extends Node2D
 var savedCardDeck = [] #template deck
 var cardDeck = [] #deck of cards in the round
-var bigBlind = 0 #forced amount of big blind
-var smallBlind = 1 #forced amount of small blind
+var bigBlind = 0 #idx of player with the big blind
+var smallBlind = 1 #idx of player with the small blind
 var tableCards = [] #5 cards on the table
 var gameUI
 
@@ -10,10 +10,12 @@ var playingPlayers = [] #players who are playing in the round
 var players = [] #players who are sitting at the table
 var actingPlayerIdx = 0 #player who's turn it is
 var playerBets = [0,0,0,0,0] #amount each player bet
+var phase = 0#phase is how many times a card(s) got revealed from the tablecards
+var tempObjects = [] #these objects will be removed every round
 
 const playerLoc = [Vector2(450,-50),Vector2(330,180),Vector2(0,240),Vector2(-330,180),Vector2(-450,-50)] #player spawn loc
 const tableCardsLoc = [Vector2(-100,0),Vector2(-50,0),Vector2(0,0),Vector2(50,0),Vector2(100,0)] #table cards spawn loc
-enum PlayerStatus {pending, raised, folded, broke, allIn, check}
+enum PlayerStatus {pending, raised, folded, broke, allIn, checked}
 
 
 	
@@ -53,55 +55,77 @@ func SetupUI():
 	
 #gamecycle
 func StartTurn():
-	actingPlayerIdx=IncrementInRange(actingPlayerIdx,0,playingPlayers.size())
 	gameUI.ChangePlayer(actingPlayerIdx)
 	if (playingPlayers[actingPlayerIdx].status == PlayerStatus.allIn): #skips the turn if player is allin
 		EndTurn()
-	for card in playingPlayers[actingPlayerIdx].hand:
+		pass
+	for card in playingPlayers[actingPlayerIdx].hand:#show the cards of the player who's turn it is
 			card.Reveal()
 
 
 func EndTurn():
-	for player in players:
+	var ShouldRevealCard = true#if true it will reveal the next card
+	for player in playingPlayers:#hide all the cards of the players
 		for card in player.hand:
 			card.Hide()
+		if(player.status !=PlayerStatus.checked):
+			ShouldRevealCard = false
+	if (ShouldRevealCard):#reveal the card according to the phase
+		if (phase == 0):
+			tableCards[0].Reveal()
+			tableCards[1].Reveal()
+			tableCards[2].Reveal()
+		if (phase == 1):
+			tableCards[3].Reveal()
+		if (phase == 2):
+			tableCards[4].Reveal()
+		if (phase == 3):
+			EndRound()
+			return
+		ResetPlayerStatuses()
+		phase += 1
+	actingPlayerIdx=IncrementInRange(actingPlayerIdx,0,playingPlayers.size())
 	StartTurn()
 	
 func StartRound():
+	#reset vars
+	playingPlayers = []
+	phase = 0
 	playerBets = [0,0,0,0,0]
-	cardDeck = savedCardDeck
+	cardDeck = savedCardDeck.duplicate()
 	cardDeck.shuffle()
 	var idx = 0
 	for player in players: #adds the players to a new round
 		if (player.chipsOwned != 0): #can the player play
 			playingPlayers.append(player)
-			player.status = PlayerStatus.pending
 			player.hand = PickCardsFromDeck(2)
 			#spawn cards with an offset from the player
 			player.hand[0].SetupScene(playerLoc[idx]+Vector2(-50,0), self)
 			player.hand[1].SetupScene(playerLoc[idx]+Vector2(50,0), self)
 			idx += 1
 	#rotate blinds
+	ResetPlayerStatuses()
 	bigBlind = IncrementInRange(bigBlind,0,playingPlayers.size()-1)
 	smallBlind = IncrementInRange(smallBlind,0,playingPlayers.size()-1)
-	players[smallBlind].Raise(10)
-	players[bigBlind].Raise(20)
-	actingPlayerIdx=DecreaseInRange(smallBlind,0,playingPlayers.size()-1) #sets the player who starts 
+	playingPlayers[smallBlind].Raise(10)
+	playingPlayers[bigBlind].Raise(20)
+	actingPlayerIdx=IncrementInRange(bigBlind,0,playingPlayers.size()-1) #sets the player who starts, which is the one left from the big blind
 	tableCards = PickCardsFromDeck(5) #gets 5 random card from the deck
 	idx = 0
 	for card in tableCards: #spawn cards on the table
 		card.SetupScene(tableCardsLoc[idx],self)
 		idx += 1
-		
-	if (playingPlayers.size() != 0):#if no players are able to play then don't start 
+	if (playingPlayers.size() >= 2):#enough players to start a game?
 		StartTurn()
 
 func EndRound():
-	cardDeck = savedCardDeck
-	cardDeck.randomize()
-	pass
-func RevealCard():
-	pass
+	#DecideWinner()
+	DevideSpoils()
+	for obj in tempObjects:
+		obj.queue_free() #removes all the temp objects from the scene
+	tempObjects = []
+	StartRound()
+	
 
 
 var allCardsPH = [] #a placeholder for the allcards array
@@ -160,7 +184,9 @@ func DecideWinner():
 	print("The winner is player: ")
 	print(winner + 1)
 	
-
+func DevideSpoils():
+	pass
+	
 func DealCards():
 	for player in playingPlayers:
 		player.hand = PickCardsFromDeck(2) #cards
@@ -306,12 +332,15 @@ func OnePairChecker():
 			finalCardsPH.append(allCardsPH[i])
 			finalCardsPH.append(allCardsPH[i+1])
 	return finalCardsPH
-
+	
+func ResetPlayerStatuses():
+	for player in playingPlayers:
+		player.status = PlayerStatus.pending
+		
 func GetAllPlayerStatuses():
 	var array
 	for player in playingPlayers:
 		array.append(player.status)
-	print(array)
 	return array
 
 func PickCardsFromDeck(amount):

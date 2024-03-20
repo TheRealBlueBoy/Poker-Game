@@ -19,6 +19,7 @@ func _init(Itype, Inumber):
 func SetupScene(loc, gm):
 	scene = preload("res://Scenes/Card/StandardCard.tscn")
 	scene = scene.instantiate()
+	gm.tempObjects.append(scene)
 	scene.position = loc
 	scene.find_child("Sprite").texture = cardBackTexture
 	scene.find_child("number").text = NumberToText(number)

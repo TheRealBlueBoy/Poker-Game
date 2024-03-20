@@ -1,4 +1,6 @@
 res://Scenes/MainScene.tscn
 res://Scenes/Player.tscn
 res://Scenes/Card/StandardCard.tscn
+res://Scripts/Player.gd
 res://Scripts/GameMode.gd
+res://Scripts/StandardCard.gd
