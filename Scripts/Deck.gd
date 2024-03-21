@@ -13,7 +13,7 @@ func createCardDeck():
 	addCardToDeck(11) #boer
 	addCardToDeck(12) #queen
 	addCardToDeck(13) #koning
-	addCardToDeck(13) #ace
+	addCardToDeck(14) #ace
 	return deck
 	
 	

@@ -101,14 +101,15 @@ func StartRound():
 			player.hand[0].SetupScene(playerLoc[idx]+Vector2(-50,-75), self)
 			player.hand[1].SetupScene(playerLoc[idx]+Vector2(50,-75), self)
 			idx += 1
+	chipsRoundTotal = Chips.new()
+	chipsRoundTotal.Init(Vector2(0,-150), 0,self)
+	tempObjects.append(chipsRoundTotal.scene)
 	#rotate blinds
 	bigBlindIdx = IncrementInRange(bigBlindIdx,0,playingPlayers.size()-1)
 	smallBlindIdx = IncrementInRange(smallBlindIdx,0,playingPlayers.size()-1)
 	playingPlayers[smallBlindIdx].Raise(10)
 	playingPlayers[bigBlindIdx].Raise(20)
 	actingPlayerIdx=IncrementInRange(bigBlindIdx,0,playingPlayers.size()-1) #sets the player who starts, which is the one left from the big blind
-	chipsRoundTotal = Chips.new()
-	chipsRoundTotal.Init(Vector2(0,-150), 0,self)
 	ResetPlayerStatuses()
 	tableCards = PickCardsFromDeck(5) #gets 5 random card from the deck
 	idx = 0

@@ -72,10 +72,10 @@ func _on_check_call_button_pressed():
 		gameMode.playingPlayers[actingPlayerIdx].Check()
 		gameMode.EndTurn()
 	elif((gameMode.playerBets.max()-gameMode.playerBets[actingPlayerIdx]) < gameMode.playingPlayers[actingPlayerIdx].chipsOwned):#does player have enough chips to call?
-		gameMode.playingPlayers[actingPlayerIdx].AllIn()
+		gameMode.playingPlayers[actingPlayerIdx].Call(gameMode.playerBets.max()-gameMode.playerBets[actingPlayerIdx])
 		gameMode.EndTurn()
 	else:
-		gameMode.playingPlayers[actingPlayerIdx].Call(gameMode.playingPlayers[actingPlayerIdx].chipsOwned)#shows the amount you need to add to go even with the raised amount
+		gameMode.playingPlayers[actingPlayerIdx].AllIn()#shows the amount you need to add to go even with the raised amount
 		gameMode.EndTurn()
 
 func _on_raise_button_pressed():

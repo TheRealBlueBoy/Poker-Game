@@ -16,13 +16,6 @@ var chipsScript
 
 enum PlayerStatus {pending, raised, folded, broke, allIn, checked}
 
-func get_current_bet():
-	# Calculate the current bet by finding the maximum bet among all players
-	for bet in gamemode.playerBets:
-		if bet > maxBet:
-			maxBet = bet
-			return maxBet
-
 func Init(i, loc, gm):#calls when made
 	var scene = preload("res://Scenes/Player.tscn")
 	index = i 
@@ -40,19 +33,13 @@ func InterpolateLocation(loc1, loc2, f):
 	
 	
 func Call(amount):
-	var currentBet = get_current_bet()
-	var player = gamemode.playerbets[gamemode.actingPlayerIdx]
-
-	if player.chipsOwned >= currentBet - gamemode.playerbets[gamemode.actingPlayerIdx]: # Check if the player has enough chips to call
-		var amountToCall = currentBet - gamemode.playerbets[gamemode.actingPlayerIdx]
-		player.chipsOwned -= amountToCall
-		gamemode.playerbets[gamemode.actingPlayerIdx] += amountToCall
-		# EndTurn()
-		print(currentBet)
-		return true
-	else:
-		return false
-
+	chipsOwned -= amount
+	chipsScript.UpdateAmount(chipsOwned)
+	gamemode.playerBets[gamemode.actingPlayerIdx] += amount
+	var totalBets = 0
+	for betAmount in gamemode.playerBets:
+		totalBets += betAmount
+	gamemode.chipsRoundTotal.UpdateAmount(totalBets)
 	status = PlayerStatus.checked
 	
 func Check():
@@ -62,22 +49,16 @@ func Fold():
 	status = PlayerStatus.folded
 
 
-func Raise(amount: int):
+func Raise(amount):
+	chipsOwned -= amount
+	chipsScript.UpdateAmount(chipsOwned)
+	gamemode.playerBets[gamemode.actingPlayerIdx] += amount
+	var totalBets = 0
+	for betAmount in gamemode.playerBets:
+		totalBets += betAmount
+	gamemode.chipsRoundTotal.UpdateAmount(totalBets)
+	status = PlayerStatus.checked
 	gamemode.ResetPlayerStatuses()
-	
-	var currentBet = get_current_bet()
-	# var player = gamemode.playerbets[gamemode.actingPlayerIdx]
-	
-	if player.chipsOwned > currentBet - gamemode.playerbets[gamemode.actingPlayerIdx]:  # Check if the player has enough chips to raise
-		var amountToCall = currentBet - gamemode.playerbets[gamemode.actingPlayerIdx]
-		player.chipsOwned -= amountToCall
-		gamemode.playerbets[gamemode.actingPlayerIdx] += amountToCall
-		# EndTurn()
-		print(currentBet)
-		return true
-	else:
-		return false
-
 	status = PlayerStatus.checked
 
 func AllIn():
