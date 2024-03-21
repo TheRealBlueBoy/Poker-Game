@@ -1,8 +1,8 @@
 class_name GameMode extends Node2D
 var savedCardDeck = [] #template deck
 var cardDeck = [] #deck of cards in the round
-var bigBlind = 0 #idx of player with the big blind
-var smallBlind = 1 #idx of player with the small blind
+var bigBlindIdx = 0 #idx of player with the big blind
+var smallBlindIdx = 1 #idx of player with the small blind
 var tableCards = [] #5 cards on the table
 var gameUI
 
@@ -12,6 +12,7 @@ var actingPlayerIdx = 0 #player who's turn it is
 var playerBets = [0,0,0,0,0] #amount each player bet
 var phase = 0#phase is how many times a card(s) got revealed from the tablecards
 var tempObjects = [] #these objects will be removed every round
+var chipsRoundTotal #amounts of chips bet by all players
 
 const playerLoc = [Vector2(450,-50),Vector2(330,180),Vector2(0,240),Vector2(-330,180),Vector2(-450,-50)] #player spawn loc
 const tableCardsLoc = [Vector2(-100,0),Vector2(-50,0),Vector2(0,0),Vector2(50,0),Vector2(100,0)] #table cards spawn loc
@@ -35,11 +36,8 @@ func SetupTable():
 	pass
 func SetupPlayers():
 	for i in 5:
-		var player_scene = preload("res://Scenes/Player.tscn")
-		player_scene = player_scene.instantiate()
-		add_child(player_scene)
 		players.append(Player.new())
-		players[i].Init(i, playerLoc[i], player_scene, self)
+		players[i].Init(i, playerLoc[i], self)
 
 func SetupDeck():
 	savedCardDeck = Deck.new().createCardDeck()
@@ -104,12 +102,14 @@ func StartRound():
 			player.hand[1].SetupScene(playerLoc[idx]+Vector2(50,0), self)
 			idx += 1
 	#rotate blinds
+	bigBlindIdx = IncrementInRange(bigBlindIdx,0,playingPlayers.size()-1)
+	smallBlindIdx = IncrementInRange(smallBlindIdx,0,playingPlayers.size()-1)
+	playingPlayers[smallBlindIdx].Raise(10)
+	playingPlayers[bigBlindIdx].Raise(20)
+	actingPlayerIdx=IncrementInRange(bigBlindIdx,0,playingPlayers.size()-1) #sets the player who starts, which is the one left from the big blind
+	chipsRoundTotal = Chips.new()
+	chipsRoundTotal.Init(Vector2(0,-150), 0,self)
 	ResetPlayerStatuses()
-	bigBlind = IncrementInRange(bigBlind,0,playingPlayers.size()-1)
-	smallBlind = IncrementInRange(smallBlind,0,playingPlayers.size()-1)
-	playingPlayers[smallBlind].Raise(10)
-	playingPlayers[bigBlind].Raise(20)
-	actingPlayerIdx=IncrementInRange(bigBlind,0,playingPlayers.size()-1) #sets the player who starts, which is the one left from the big blind
 	tableCards = PickCardsFromDeck(5) #gets 5 random card from the deck
 	idx = 0
 	for card in tableCards: #spawn cards on the table
