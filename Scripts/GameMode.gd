@@ -100,8 +100,8 @@ func StartRound():
 			playingPlayers.append(player)
 			player.hand = PickCardsFromDeck(2)
 			#spawn cards with an offset from the player
-			player.hand[0].SetupScene(playerLoc[idx]+Vector2(-50,0), self)
-			player.hand[1].SetupScene(playerLoc[idx]+Vector2(50,0), self)
+			player.hand[0].SetupScene(playerLoc[idx]+Vector2(-50,-75), self)
+			player.hand[1].SetupScene(playerLoc[idx]+Vector2(50,-75), self)
 			idx += 1
 	#rotate blinds
 	ResetPlayerStatuses()
