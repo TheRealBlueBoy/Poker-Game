@@ -56,7 +56,6 @@ func StartTurn():
 	gameUI.ChangePlayer(actingPlayerIdx)
 	if (playingPlayers[actingPlayerIdx].status == PlayerStatus.allIn): #skips the turn if player is allin
 		EndTurn()
-		pass
 	for card in playingPlayers[actingPlayerIdx].hand:#show the cards of the player who's turn it is
 			card.Reveal()
 

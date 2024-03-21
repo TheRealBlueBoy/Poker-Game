@@ -62,5 +62,12 @@ func Raise(amount):
 	status = PlayerStatus.checked
 
 func AllIn():
+	var totalBets = 0
+	for betAmount in gamemode.playerBets:
+		totalBets += betAmount
+	chipsOwned = 0
+	chipsScript.UpdateAmount(chipsOwned)
+	gamemode.chipsRoundTotal.UpdateAmount(totalBets)
 	gamemode.ResetPlayerStatuses()
-	status = PlayerStatus.checked
+	status = PlayerStatus.allIn
+	
