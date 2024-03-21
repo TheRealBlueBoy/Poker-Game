@@ -119,7 +119,7 @@ func StartRound():
 		StartTurn()
 
 func EndRound():
-	#DecideWinner()
+	DecideWinner()
 	DevideSpoils()
 	for obj in tempObjects:
 		obj.queue_free() #removes all the temp objects from the scene
@@ -133,16 +133,15 @@ var finalCardsPH = [] #a placeholder for the finalCards array
 var winner
 
 func DecideWinner():
-	for player in players:
-		playingPlayers.append(player)
-	
 	for player in playingPlayers:
 		finalCardsPH = []
+		allCardsPH = []
+		player.allCards = []
 		player.finalScore = 0
 		player.allCards.append_array(tableCards)
 		player.allCards.append_array(player.hand)
 		player.allCards.sort_custom(SortDescendingCard)
-		allCardsPH = player.allCards
+		allCardsPH = player.allCards.duplicate()
 		
 		if StraightFlushChecker().size() == 5:
 			player.finalScore = 8
@@ -160,7 +159,7 @@ func DecideWinner():
 			player.finalScore = 2
 		elif OnePairChecker().size() == 2:
 			player.finalScore = 1
-		player.finalCards = finalCardsPH
+		player.finalCards = finalCardsPH.duplicate()
 	playingPlayers.sort_custom(SortDescendingPlayer)
 	var tiedPlayers = []
 	if playingPlayers[0].finalScore == playingPlayers[1].finalScore:
@@ -168,21 +167,26 @@ func DecideWinner():
 			if playingPlayers[2].finalScore == playingPlayers[3].finalScore:
 				if playingPlayers[3].finalScore == playingPlayers[4].finalScore:
 					print("tie between all 5 players")
+					return
 				tiedPlayers.append(playingPlayers[0].index)
 				tiedPlayers.append(playingPlayers[1].index)
 				tiedPlayers.append(playingPlayers[2].index)
 				tiedPlayers.append(playingPlayers[3].index)
 				print("tie between player x, x, x and x")
+				return
 			tiedPlayers.append(playingPlayers[0].index)
 			tiedPlayers.append(playingPlayers[1].index)
 			tiedPlayers.append(playingPlayers[2].index)
 			print("tie between player x, x and x")
+			return
 		tiedPlayers.append(playingPlayers[0].index)
 		tiedPlayers.append(playingPlayers[1].index)
 		print("tie between player x and x")
+		return
 	winner = playingPlayers[0].index
 	print("The winner is player: ")
 	print(winner + 1)
+	return
 	
 func DevideSpoils():
 	pass
@@ -249,8 +253,8 @@ func FourOfAKindChecker():
 	
 func FullHouseChecker():
 	var temporaryCards = []
-	temporaryCards = allCardsPH
-	for i in 5:
+	temporaryCards = allCardsPH.duplicate()
+	for i in 4:
 		if allCardsPH[i].number == allCardsPH[i+1].number:
 			if allCardsPH [i+1].number == allCardsPH[i+2].number:
 				finalCardsPH.append(allCardsPH[i])
@@ -313,21 +317,23 @@ func ThreeOfAKindChecker():
 
 func TwoPairChecker():
 	var temporaryCards = []
-	temporaryCards = allCardsPH
-	for i in 4:
-		if allCardsPH[i].number == allCardsPH[i+1].number:
-			finalCardsPH.append(allCardsPH[i])
-			finalCardsPH.append(allCardsPH[i+1])
-			temporaryCards.remove_at(i)
-			temporaryCards.remove_at(i+1)
-	for i in 4:
-		if temporaryCards[i].number == temporaryCards[i+1].number:
-			finalCardsPH.append(temporaryCards[i])
-			finalCardsPH.append(temporaryCards[i+1])
+	temporaryCards = allCardsPH.duplicate()
+	for i in 6:
+		if finalCardsPH.size() == 0:
+			if allCardsPH[i].number == allCardsPH[i+1].number:
+				finalCardsPH.append(allCardsPH[i])
+				finalCardsPH.append(allCardsPH[i+1])
+				temporaryCards.remove_at(i)
+				temporaryCards.remove_at(i+1)
+	if finalCardsPH.size() == 2:
+		for i in 4:
+			if temporaryCards[i].number == temporaryCards[i+1].number:
+				finalCardsPH.append(temporaryCards[i])
+				finalCardsPH.append(temporaryCards[i+1])
 	return finalCardsPH
 
 func OnePairChecker():
-	for i in 6:
+	for i in 5:
 		if allCardsPH[i].number == allCardsPH[i+1].number:
 			finalCardsPH.append(allCardsPH[i])
 			finalCardsPH.append(allCardsPH[i+1])
