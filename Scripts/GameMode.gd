@@ -130,7 +130,7 @@ func EndRound():
 
 var allCardsPH = [] #a placeholder for the allcards array
 var finalCardsPH = [] #a placeholder for the finalCards array
-var winner
+var winners = []
 
 func DecideWinner():
 	for player in playingPlayers:
@@ -162,31 +162,63 @@ func DecideWinner():
 		player.finalCards = finalCardsPH.duplicate()
 	playingPlayers.sort_custom(SortDescendingPlayer)
 	var tiedPlayers = []
+	var winningPlayers = []
+	tiedPlayers = []
+	winners = []
 	if playingPlayers[0].finalScore == playingPlayers[1].finalScore:
 		if playingPlayers[1].finalScore == playingPlayers[2].finalScore:
 			if playingPlayers[2].finalScore == playingPlayers[3].finalScore:
-				if playingPlayers[3].finalScore == playingPlayers[4].finalScore:
-					print("tie between all 5 players")
-					return
-				tiedPlayers.append(playingPlayers[0].index)
-				tiedPlayers.append(playingPlayers[1].index)
-				tiedPlayers.append(playingPlayers[2].index)
-				tiedPlayers.append(playingPlayers[3].index)
-				print("tie between player x, x, x and x")
-				return
-			tiedPlayers.append(playingPlayers[0].index)
-			tiedPlayers.append(playingPlayers[1].index)
-			tiedPlayers.append(playingPlayers[2].index)
-			print("tie between player x, x and x")
-			return
-		tiedPlayers.append(playingPlayers[0].index)
-		tiedPlayers.append(playingPlayers[1].index)
-		print("tie between player x and x")
-		return
-	winner = playingPlayers[0].index
-	print("The winner is player: ")
-	print(winner + 1)
-	return
+				tiedPlayers.append(playingPlayers[0])
+				tiedPlayers.append(playingPlayers[1])
+				tiedPlayers.append(playingPlayers[2])
+				tiedPlayers.append(playingPlayers[3])
+				winningPlayers = highcardChecker(tiedPlayers, 4).duplicate()
+				if winningPlayers.size() == 4:
+					winners.append_array(winningPlayers)
+					print(winners)
+					return winners
+				if winningPlayers.size() == 3:
+					winners.append_array(winningPlayers)
+					print(winners)
+					return winners
+				if winningPlayers.size() == 2:
+					winners.append_array(winningPlayers)
+					print(winners)
+					return winners
+				if winningPlayers.size() == 1:
+					winners.append_array(winningPlayers)
+					print(winners)
+					return winners
+			tiedPlayers.append(playingPlayers[0])
+			tiedPlayers.append(playingPlayers[1])
+			tiedPlayers.append(playingPlayers[2])
+			winningPlayers = highcardChecker(tiedPlayers, 3).duplicate()
+			if winningPlayers.size() == 3:
+				winners.append_array(winningPlayers)
+				print(winners)
+				return winners
+			if winningPlayers.size() == 2:
+				winners.append_array(winningPlayers)
+				print(winners)
+				return winners
+			if winningPlayers.size() == 1:
+				winners.append_array(winningPlayers)
+				print(winners)
+				return winners
+		tiedPlayers.append(playingPlayers[0])
+		tiedPlayers.append(playingPlayers[1])
+		winningPlayers = highcardChecker(tiedPlayers, 2).duplicate()
+		if winningPlayers.size() == 2:
+			winners.append_array(winningPlayers)
+			print(winners)
+			return winners
+		if winningPlayers.size() == 1:
+			winners.append_array(winningPlayers)
+			print(winners)
+			return winners
+	winners.append(playingPlayers[0].index)
+	print(winners)
+	return winners
 	
 func DevideSpoils():
 	pass
@@ -204,6 +236,50 @@ func SortDescendingPlayer(a, b):
 	if a.finalScore > b.finalScore:
 		return true
 	return false
+
+func SortDescendingPlayerHand(a, b):
+	if a.hand[0].number > b.hand[0].number:
+		return true
+	elif a.hand[0].number == b.hand[0].number:
+		if a.hand[1].number > b.hand[1].number:
+			return true
+	return false
+	
+func highcardChecker(tied, amount):
+	var tiedPlayers = []
+	tied.sort_custom(SortDescendingPlayerHand)
+	if tied[0].hand[0].number == tied[1].hand[0].number:
+		if amount >= 3:
+			if tied[1].hand[0].number == tied[2].hand[0].number:
+				if amount >= 4:
+					if tied[2].hand[0].number == tied[3].hand[0].number:
+						if tied[0].hand[1].number == tied[1].hand[1].number:
+							if tied[1].hand[1].number == tied[2].hand[1].number:
+								if tied[2].hand[1].number == tied[3].hand[1].number:
+									tiedPlayers.append(tied[0].index)
+									tiedPlayers.append(tied[1].index)
+									tiedPlayers.append(tied[2].index)
+									tiedPlayers.append(tied[3].index)
+								tiedPlayers.append(tied[0].index)
+								tiedPlayers.append(tied[1].index)
+								tiedPlayers.append(tied[2].index)
+							tiedPlayers.append(tied[0].index)
+							tiedPlayers.append(tied[1].index)
+						tiedPlayers.append(tied[0].index)
+				if tied[0].hand[1].number == tied[1].hand[1].number:
+					if tied[1].hand[1].number == tied[2].hand[1].number:
+						tiedPlayers.append(tied[0].index)
+						tiedPlayers.append(tied[1].index)
+						tiedPlayers.append(tied[2].index)
+					tiedPlayers.append(tied[0].index)
+					tiedPlayers.append(tied[1].index)
+				tiedPlayers.append(tied[0].index)
+			if tied[0].hand[1].number == tied[1].hand[1].number:
+				tiedPlayers.append(tied[0].index)
+				tiedPlayers.append(tied[1].index)
+			tiedPlayers.append(tied[0].index)
+	tiedPlayers.append(tied[0].index)
+	return tiedPlayers
 
 func StraightFlushChecker():
 	var temporaryCards = []
@@ -263,10 +339,11 @@ func FullHouseChecker():
 				temporaryCards.remove_at(i)
 				temporaryCards.remove_at(i+1)
 				temporaryCards.remove_at(i+2)
-	for i in 3:
-		if temporaryCards[i].number == temporaryCards[i+1].number:
-			finalCardsPH.append(temporaryCards[i])
-			finalCardsPH.append(temporaryCards[i+1])
+	if finalCardsPH.size() == 3:
+		for i in 3:
+			if temporaryCards[i].number == temporaryCards[i+1].number:
+				finalCardsPH.append(temporaryCards[i])
+				finalCardsPH.append(temporaryCards[i+1])
 	return finalCardsPH
 	
 func FlushChecker():
