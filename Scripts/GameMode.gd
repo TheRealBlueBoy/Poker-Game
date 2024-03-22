@@ -1,8 +1,8 @@
 class_name GameMode extends Node2D
 var savedCardDeck = [] #template deck
 var cardDeck = [] #deck of cards in the round
-var bigBlindIdx = 0 #idx of player with the big blind
-var smallBlindIdx = 1 #idx of player with the small blind
+var bigBlindIdx = 1 #idx of player with the big blind
+var smallBlindIdx = 0 #idx of player with the small blind
 var tableCards = [] #5 cards on the table
 var gameUI
 
@@ -16,7 +16,6 @@ var chipsRoundTotal #amounts of chips bet by all players
 
 const playerLoc = [Vector2(450,-50),Vector2(330,180),Vector2(0,240),Vector2(-330,180),Vector2(-450,-50)] #player spawn loc
 const tableCardsLoc = [Vector2(-100,0),Vector2(-50,0),Vector2(0,0),Vector2(50,0),Vector2(100,0)] #table cards spawn loc
-enum PlayerStatus {pending, raised, folded, broke, allIn, checked}
 
 
 	
@@ -30,7 +29,7 @@ func Setup():
 	SetupDeck()
 	SetupUI()
 	StartRound()
-	#DecideWinner()
+
 
 func SetupTable():
 	pass
@@ -54,8 +53,9 @@ func SetupUI():
 #gamecycle
 func StartTurn():
 	gameUI.ChangePlayer(actingPlayerIdx)
-	if (playingPlayers[actingPlayerIdx].status == PlayerStatus.allIn): #skips the turn if player is allin
+	if (playingPlayers[actingPlayerIdx].status == playingPlayers[actingPlayerIdx].PlayerStatus.allIn): #skips the turn if player is allin
 		EndTurn()
+		return
 	for card in playingPlayers[actingPlayerIdx].hand:#show the cards of the player who's turn it is
 		card.Reveal()
 
@@ -65,7 +65,9 @@ func EndTurn():
 	for player in playingPlayers:#hide all the cards of the players
 		for card in player.hand:
 			card.Hide()
-		if(player.status !=PlayerStatus.checked):
+		if((player.status == playingPlayers[actingPlayerIdx].PlayerStatus.checked) or (player.status == playingPlayers[actingPlayerIdx].PlayerStatus.allIn)):
+			pass
+		else:
 			ShouldRevealCard = false
 	if (ShouldRevealCard):#reveal the card according to the phase
 		if (phase == 0):
@@ -79,9 +81,9 @@ func EndTurn():
 		if (phase == 3):
 			EndRound()
 			return
-		ResetPlayerStatuses()
+		ResetPlayerStatusesInPhase()
 		phase += 1
-	actingPlayerIdx=IncrementInRange(actingPlayerIdx,0,playingPlayers.size())
+	actingPlayerIdx=IncrementInRange(actingPlayerIdx,0,playingPlayers.size()-1)
 	StartTurn()
 	
 func StartRound():
@@ -100,27 +102,28 @@ func StartRound():
 			player.hand[0].SetupScene(playerLoc[idx]+Vector2(-50,-75), self)
 			player.hand[1].SetupScene(playerLoc[idx]+Vector2(50,-75), self)
 			idx += 1
+	ResetPlayerStatuses()
 	chipsRoundTotal = Chips.new()
 	chipsRoundTotal.Init(Vector2(0,-150), 0,self)
 	tempObjects.append(chipsRoundTotal.scene)
+	if (playingPlayers.size() < 2):#enough players to start a game?
+		return
 	#rotate blinds
 	bigBlindIdx = IncrementInRange(bigBlindIdx,0,playingPlayers.size()-1)
 	smallBlindIdx = IncrementInRange(smallBlindIdx,0,playingPlayers.size()-1)
-	for player in playingPlayers:
+	for player in players:
 		player.HideBs()
 	playingPlayers[smallBlindIdx].SB()
 	playingPlayers[bigBlindIdx].BB()
 	playingPlayers[smallBlindIdx].Raise(10)
 	playingPlayers[bigBlindIdx].Raise(20)
 	actingPlayerIdx=IncrementInRange(bigBlindIdx,0,playingPlayers.size()-1) #sets the player who starts, which is the one left from the big blind
-	ResetPlayerStatuses()
 	tableCards = PickCardsFromDeck(5) #gets 5 random card from the deck
 	idx = 0
 	for card in tableCards: #spawn cards on the table
 		card.SetupScene(tableCardsLoc[idx],self)
 		idx += 1
-	if (playingPlayers.size() >= 2):#enough players to start a game?
-		StartTurn()
+	StartTurn()
 
 func EndRound():
 	DecideWinner()
@@ -428,7 +431,12 @@ func OnePairChecker():
 	
 func ResetPlayerStatuses():
 	for player in playingPlayers:
-		player.status = PlayerStatus.pending
+		player.status = playingPlayers[actingPlayerIdx].PlayerStatus.pending
+
+func ResetPlayerStatusesInPhase():
+	for player in playingPlayers:
+		if (player.status != playingPlayers[actingPlayerIdx].PlayerStatus.allIn):
+			player.status = playingPlayers[actingPlayerIdx].PlayerStatus.pending
 		
 func GetAllPlayerStatuses():
 	var array
@@ -446,13 +454,13 @@ func PickCardsFromDeck(amount):
 	return pickedCards
 
 func IncrementInRange(number,min, max):
-	if (number+1 >= max):
+	if (number+1 > max):
 		return min
 	else:
 		return (number+1)
 		
 func DecreaseInRange(number,min, max):
-	if (number-1 <= min):
+	if (number-1 < min):
 		return max
 	else:
 		return (number-1)

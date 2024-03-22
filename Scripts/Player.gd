@@ -32,7 +32,6 @@ func Init(i, loc, gm):#calls when made
 	bbScript.Init(scene.position + Vector2(50, 30), gamemode)
 	sbScript = SmallBlind.new()
 	sbScript.Init(scene.position + Vector2(50, 30), gamemode)
-#InterpolateLocation(scene.position, Vector2(0,0),0.35)
 
 func InterpolateLocation(loc1, loc2, f):
 	return (loc1 + f*(loc2-loc1))
@@ -41,7 +40,7 @@ func InterpolateLocation(loc1, loc2, f):
 func Call(amount):
 	chipsOwned -= amount
 	chipsScript.UpdateAmount(chipsOwned)
-	gamemode.playerBets[gamemode.actingPlayerIdx] += amount
+	gamemode.playerBets[GetIdxPlayingPlayers()] += amount
 	var totalBets = 0
 	for betAmount in gamemode.playerBets:
 		totalBets += betAmount
@@ -53,29 +52,37 @@ func Check():
 	
 func Fold():
 	status = PlayerStatus.folded
+	
 
 
 func Raise(amount):
+	if (amount >= chipsOwned):
+		AllIn()
+		return
 	chipsOwned -= amount
 	chipsScript.UpdateAmount(chipsOwned)
-	gamemode.playerBets[gamemode.actingPlayerIdx] += amount
+	gamemode.playerBets[GetIdxPlayingPlayers()] += amount
 	var totalBets = 0
 	for betAmount in gamemode.playerBets:
 		totalBets += betAmount
 	gamemode.chipsRoundTotal.UpdateAmount(totalBets)
-	status = PlayerStatus.checked
-	gamemode.ResetPlayerStatuses()
+	gamemode.ResetPlayerStatusesInPhase()
 	status = PlayerStatus.checked
 
 func AllIn():
+	if (gamemode.playerBets.max() < (chipsOwned+gamemode.playerBets[GetIdxPlayingPlayers()])):
+		gamemode.ResetPlayerStatusesInPhase()
+	gamemode.playerBets[GetIdxPlayingPlayers()] += chipsOwned
 	var totalBets = 0
 	for betAmount in gamemode.playerBets:
 		totalBets += betAmount
 	chipsOwned = 0
 	chipsScript.UpdateAmount(chipsOwned)
 	gamemode.chipsRoundTotal.UpdateAmount(totalBets)
-	gamemode.ResetPlayerStatuses()
 	status = PlayerStatus.allIn
+	
+func GetIdxPlayingPlayers():
+	return gamemode.playingPlayers.find(self)
 
 func HideBs():
 	bbScript.Hide()

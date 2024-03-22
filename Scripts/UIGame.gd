@@ -79,8 +79,11 @@ func _on_check_call_button_pressed():
 		gameMode.EndTurn()
 
 func _on_raise_button_pressed():
-	if(raiseBar.visible):
+	if(raiseBar.visible and raiseBar.value<1):
 		gameMode.playingPlayers[actingPlayerIdx].Raise(raiseBar.value * gameMode.playingPlayers[actingPlayerIdx].chipsOwned)
+		gameMode.EndTurn()
+	elif(raiseBar.visible and raiseBar.value==1):
+		gameMode.playingPlayers[actingPlayerIdx].AllIn()
 		gameMode.EndTurn()
 	else:
 		SetRaiseBarVisibility(true)
