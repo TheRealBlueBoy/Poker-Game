@@ -7,4 +7,3 @@ res://Scenes/Bb.tscn
 res://Scenes/Card/Card.tscn
 res://Scenes/UI_Game.tscn
 res://Scripts/GameMode.gd
-res://Scripts/Player.gd

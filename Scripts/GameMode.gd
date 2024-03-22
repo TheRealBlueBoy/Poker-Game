@@ -129,12 +129,11 @@ func StartRound():
 	StartTurn()
 
 func EndRound():
-	DecideWinner()
 	OpenUp()
 	gameUI.set_visible(false)
 	await get_tree().create_timer(5).timeout #pauses the game for 5 seconds
 	gameUI.set_visible(true)
-	DevideSpoils()
+	DevideSpoils(DecideWinner())
 	for obj in tempObjects:
 		obj.queue_free() #removes all the temp objects from the scene
 	tempObjects = []
@@ -197,8 +196,19 @@ func OpenUp():
 		for card in player.hand:
 			card.Reveal()
 
-func DevideSpoils():
-	pass
+func DevideSpoils(winners):
+	var totalBets = 0
+	var winnersAmount = winners.size()
+	chipsRoundTotal.UpdateAmount(totalBets)
+	for betAmount in playerBets:
+		totalBets += betAmount
+	if (winnersAmount == 1):#if only one player won
+		players[winners[0]].chipsOwned += totalBets
+	else:
+		for player in winners:
+			player.chipsOwned += (totalBets/winnersAmount)
+	for player in players:
+		player.chipsScript.UpdateAmount(player.chipsOwned)
 	
 func DealCards():
 	for player in playingPlayers:
