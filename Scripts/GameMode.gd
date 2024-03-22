@@ -106,6 +106,10 @@ func StartRound():
 	#rotate blinds
 	bigBlindIdx = IncrementInRange(bigBlindIdx,0,playingPlayers.size()-1)
 	smallBlindIdx = IncrementInRange(smallBlindIdx,0,playingPlayers.size()-1)
+	for player in playingPlayers:
+		player.HideBs()
+	playingPlayers[smallBlindIdx].SB()
+	playingPlayers[bigBlindIdx].BB()
 	playingPlayers[smallBlindIdx].Raise(10)
 	playingPlayers[bigBlindIdx].Raise(20)
 	actingPlayerIdx=IncrementInRange(bigBlindIdx,0,playingPlayers.size()-1) #sets the player who starts, which is the one left from the big blind

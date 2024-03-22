@@ -13,6 +13,8 @@ var allCards = []
 var finalCards = []
 var finalScore #integer which gives a score to specific hands, used to decide a winner
 var chipsScript
+var bbScript
+var sbScript
 
 enum PlayerStatus {pending, raised, folded, broke, allIn, checked}
 
@@ -26,6 +28,10 @@ func Init(i, loc, gm):#calls when made
 	scene.find_child("PlayerSprite").texture = playerTextures[index]
 	chipsScript = Chips.new()
 	chipsScript.Init(scene.position + Vector2(50,-10), chipsOwned, gamemode)
+	bbScript = BigBlind.new()
+	bbScript.Init(scene.position + Vector2(50, 30), gamemode)
+	sbScript = SmallBlind.new()
+	sbScript.Init(scene.position + Vector2(50, 30), gamemode)
 #InterpolateLocation(scene.position, Vector2(0,0),0.35)
 
 func InterpolateLocation(loc1, loc2, f):
@@ -70,4 +76,13 @@ func AllIn():
 	gamemode.chipsRoundTotal.UpdateAmount(totalBets)
 	gamemode.ResetPlayerStatuses()
 	status = PlayerStatus.allIn
+
+func HideBs():
+	bbScript.Hide()
+	sbScript.Hide()
 	
+func BB():
+	bbScript.Show()
+
+func SB():
+	sbScript.Show()

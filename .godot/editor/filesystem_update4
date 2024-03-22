@@ -1,4 +1,12 @@
 res://Scenes/MainScene.tscn
+res://Scripts/BigBlind.gd
+res://Scripts/Player.gd
 res://Scenes/Player.tscn
 res://Scenes/Card/StandardCard.tscn
+res://Scenes/Chips.tscn
+res://Scenes/Sb.tscn
+res://Scripts/SmallBlind.gd
+res://Scenes/Bb.tscn
 res://Scripts/GameMode.gd
+res://Scripts/Chips.gd
+res://Scenes/Card/Card.tscn

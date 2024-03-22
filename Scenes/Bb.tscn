@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://dvajb0ie22wus"]
+
+[ext_resource type="Texture2D" uid="uid://1vahk7t23v7l" path="res://Assets/Blinds/BB.png" id="1_x83y4"]
+
+[node name="BB" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 3
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("1_x83y4")
