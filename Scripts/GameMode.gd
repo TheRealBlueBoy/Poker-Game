@@ -128,7 +128,9 @@ func StartRound():
 func EndRound():
 	DecideWinner()
 	OpenUp()
+	gameUI.set_visible(false)
 	await get_tree().create_timer(5).timeout #pauses the game for 5 seconds
+	gameUI.set_visible(true)
 	DevideSpoils()
 	for obj in tempObjects:
 		obj.queue_free() #removes all the temp objects from the scene
