@@ -109,6 +109,7 @@ func StartRound():
 	chipsRoundTotal.Init(Vector2(0,-150), 0,self)
 	tempObjects.append(chipsRoundTotal.scene)
 	if (playingPlayers.size() < 2):#enough players to start a game?
+		gameUI.set_visible(false)
 		return
 	#rotate blinds
 	bigBlindIdx = IncrementInRange(bigBlindIdx,0,playingPlayers.size()-1)
