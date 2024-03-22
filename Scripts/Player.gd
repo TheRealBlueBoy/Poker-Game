@@ -51,6 +51,15 @@ func Check():
 	status = PlayerStatus.checked
 	
 func Fold():
+	#remove cards
+	gamemode.tempObjects.pop_at(gamemode.tempObjects.find(hand[0].scene))
+	gamemode.tempObjects.pop_at(gamemode.tempObjects.find(hand[1].scene))
+	hand[0].scene.queue_free()
+	hand[1].scene.queue_free()
+	hand.clear()
+	#corrects the actingplayer with the removal of the current actingplayer
+	gamemode.actingPlayerIdx = gamemode.DecreaseInRange(gamemode.actingPlayerIdx, 0, gamemode.playingPlayers.size())
+	gamemode.playingPlayers.pop_at(GetIdxPlayingPlayers())#removes self from playingplayers
 	status = PlayerStatus.folded
 	
 

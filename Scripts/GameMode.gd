@@ -83,6 +83,8 @@ func EndTurn():
 			return
 		ResetPlayerStatusesInPhase()
 		phase += 1
+	if (playingPlayers.size() == 1):
+		EndRound()
 	actingPlayerIdx=IncrementInRange(actingPlayerIdx,0,playingPlayers.size()-1)
 	StartTurn()
 	
@@ -173,60 +175,19 @@ func DecideWinner():
 	var tiedPlayers = [] #holds the tied players of combination checks
 	var winningPlayers = [] #holds the tied player(s) of the highcardchecker
 	winners = [] #resets winner array
-	if playingPlayers[0].finalScore == playingPlayers[1].finalScore: #checks if the highgest scores are the same
-		if playingPlayers[1].finalScore == playingPlayers[2].finalScore:
-			if playingPlayers[2].finalScore == playingPlayers[3].finalScore:
-				tiedPlayers.append(playingPlayers[0])
-				tiedPlayers.append(playingPlayers[1])
-				tiedPlayers.append(playingPlayers[2])
-				tiedPlayers.append(playingPlayers[3])
-				winningPlayers = highcardChecker(tiedPlayers, 4).duplicate()
-				if winningPlayers.size() == 4: #checks size of array tied players from highcardcheck
-					winners.append_array(winningPlayers)
-					print(winners)
-					return winners
-				if winningPlayers.size() == 3: #checks size of array tied players from highcardcheck
-					winners.append_array(winningPlayers)
-					print(winners)
-					return winners
-				if winningPlayers.size() == 2: #checks size of array tied players from highcardcheck
-					winners.append_array(winningPlayers)
-					print(winners)
-					return winners
-				if winningPlayers.size() == 1: #checks size of array tied players from highcardcheck
-					winners.append_array(winningPlayers)
-					print(winners)
-					return winners
-			tiedPlayers.append(playingPlayers[0])
-			tiedPlayers.append(playingPlayers[1])
-			tiedPlayers.append(playingPlayers[2])
-			winningPlayers = highcardChecker(tiedPlayers, 3).duplicate()
-			if winningPlayers.size() == 3: #checks size of array tied players from highcardcheck
-				winners.append_array(winningPlayers)
-				print(winners)
-				return winners
-			if winningPlayers.size() == 2: #checks size of array tied players from highcardcheck
-				winners.append_array(winningPlayers)
-				print(winners)
-				return winners
-			if winningPlayers.size() == 1: #checks size of array tied players from highcardcheck
-				winners.append_array(winningPlayers)
-				print(winners)
-				return winners
-		tiedPlayers.append(playingPlayers[0])
-		tiedPlayers.append(playingPlayers[1])
-		winningPlayers = highcardChecker(tiedPlayers, 2).duplicate()
-		if winningPlayers.size() == 2: #checks size of array tied players from highcardcheck
-			winners.append_array(winningPlayers)
-			print(winners)
-			return winners
-		if winningPlayers.size() == 1: #checks size of array tied players from highcardcheck
-			winners.append_array(winningPlayers)
-			print(winners)
-			return winners
-	winners.append(playingPlayers[0].index)
+	for player in playingPlayers:#checks if the highgest scores are the same
+		if (playingPlayers.find(player) != playingPlayers.size()-1): #is the next player a valid index
+			if (player.finalScore == playingPlayers[playingPlayers.find(player)+1].finalScore): #same score?
+				tiedPlayers.append(player)
+	if (tiedPlayers.size() == 0):#if not a tie, player [0] wins
+		winningPlayers = [playingPlayers[0]]
+	else: #check highest card 
+		winningPlayers = highcardChecker(tiedPlayers, (tiedPlayers.size()-1)).duplicate()
+	for player in winningPlayers: #convert players to idx
+		winningPlayers[winningPlayers.find(player)] = player.index
+	winners = winningPlayers.duplicate()
 	print(winners)
-	return winners
+	return(winners)
 
 func OpenUp():
 	for player in playingPlayers:
@@ -261,38 +222,23 @@ func SortDescendingPlayerHand(a, b):
 func highcardChecker(tied, amount): #checks hand for highcards
 	var tiedPlayers = []
 	tied.sort_custom(SortDescendingPlayerHand) #sorts array given by first and second card numbers
-	if tied[0].hand[0].number == tied[1].hand[0].number: #checks if the numbers of card 1 are the same
-		if amount >= 3:
-			if tied[1].hand[0].number == tied[2].hand[0].number:
-				if amount >= 4:
-					if tied[2].hand[0].number == tied[3].hand[0].number: #checks if the numbers of card 2 are the same
-						if tied[0].hand[1].number == tied[1].hand[1].number:
-							if tied[1].hand[1].number == tied[2].hand[1].number:
-								if tied[2].hand[1].number == tied[3].hand[1].number:
-									tiedPlayers.append(tied[0].index)
-									tiedPlayers.append(tied[1].index)
-									tiedPlayers.append(tied[2].index)
-									tiedPlayers.append(tied[3].index)
-								tiedPlayers.append(tied[0].index)
-								tiedPlayers.append(tied[1].index)
-								tiedPlayers.append(tied[2].index)
-							tiedPlayers.append(tied[0].index)
-							tiedPlayers.append(tied[1].index)
-						tiedPlayers.append(tied[0].index)
-				if tied[0].hand[1].number == tied[1].hand[1].number: #checks if the numbers of card 2 are the same
-					if tied[1].hand[1].number == tied[2].hand[1].number:
-						tiedPlayers.append(tied[0].index)
-						tiedPlayers.append(tied[1].index)
-						tiedPlayers.append(tied[2].index)
-					tiedPlayers.append(tied[0].index)
-					tiedPlayers.append(tied[1].index)
-				tiedPlayers.append(tied[0].index)
-			if tied[0].hand[1].number == tied[1].hand[1].number: #checks if the numbers of card 2 are the same
-				tiedPlayers.append(tied[0].index)
-				tiedPlayers.append(tied[1].index)
-			tiedPlayers.append(tied[0].index)
-	tiedPlayers.append(tied[0].index)
+	for player1 in tied:
+		if (tiedPlayers.find(player1) != tiedPlayers.size()-1): #is the next player a valid index
+			var player2 = tiedPlayers[tiedPlayers.size()-1]
+			#checks if the numbers of the cards are the same in each players hands
+			if (player1.hand[0] == player2.hand[0]):
+				if (tiedPlayers.has(player1) != true):#is player1 already in tiedplayers (prevents duplicates of players)
+					tiedPlayers.append(player1)
+				tiedPlayers.append(player2)
+			elif(player1.hand[1] == player2.hand[1]):
+				if (tiedPlayers.has(player1) != true):#is player1 already in tiedplayers (prevents duplicates of players)
+					tiedPlayers.append(player1)
+				tiedPlayers.append(player2)
+	if (tiedPlayers.size() == 0):
+		tiedPlayers.append(tied[0])
 	return tiedPlayers
+						
+			
 
 func StraightFlushChecker():
 	var temporaryCards = []

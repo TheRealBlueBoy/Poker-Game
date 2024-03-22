@@ -5,6 +5,6 @@ res://Scenes/Chips.tscn
 res://Scenes/Sb.tscn
 res://Scenes/Bb.tscn
 res://Scenes/Card/Card.tscn
+res://Scenes/UI_Game.tscn
 res://Scripts/GameMode.gd
 res://Scripts/Player.gd
-res://Scripts/UIGame.gd
